@@ -1,0 +1,11 @@
+<button type="button" name="showComments" id="showComments" {{action "showComments"}}>{{buttonShowComments}}{{comments.length}} </button>
+<div class="displayComments">
+  {{#if isDisplayed}}
+    {{#tether-dialog close='showComments' hasOverlay=false clickOutsideToClose=true  target='#showComments' targetAttachment='bottom middle'
+    attachment='top right'}}
+      {{list-comments comments=comments createComment="createComment" deleteComment="deleteComment"
+      modifyComment="modifyComment"}}
+        <button {{action "showComments"}}>Close</button>
+    {{/tether-dialog}}
+  {{/if}}
+</div>

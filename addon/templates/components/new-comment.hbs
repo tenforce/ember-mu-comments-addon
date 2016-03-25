@@ -1,0 +1,8 @@
+<div class="content">
+    <p>
+      {{input type="textarea" class="newCommentText" value=newCommentContent name="commentContent" placeholder="Please insert your comment. "}}
+    </p>
+</div>
+<div class="newButton">
+    <button type="button" name="submitNewComment" id="submitNewComment" {{action "createComment" newCommentContent}}> Add comment </button>
+</div>

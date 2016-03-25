@@ -1,0 +1,13 @@
+<div class="listcomments">
+    <div class="newcomment">
+      {{#if isDescSort}}
+        {{new-comment createComment="createComment"}}
+      {{/if}}
+    </div>
+  {{#each sortedComments as |comment|}}
+      <div class="displaycomment">
+          <hr/>
+        {{display-comment comment=comment deleteComment="deleteComment" modifyComment="modifyComment"}}
+      </div>
+  {{/each}}
+</div>

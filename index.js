@@ -2,5 +2,5 @@
 'use strict';
 
 module.exports = {
-  name: 'mu-comments'
+  name: 'ember-mu-comments'
 };

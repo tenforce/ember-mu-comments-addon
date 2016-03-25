@@ -1,0 +1,17 @@
+<div class="top">
+    <p class="author">{{comment.authorLabel}}</p>
+    <div class="buttons">
+        <button type="button" name="deleteComment"  {{action "deleteComment" comment}}> X </button>
+        <button type="button" name="modifyComment" disabled={{isNotAllowed}} {{action "changeModifyState" }}> {{modValue}}  </button>
+    </div>
+</div>
+
+<div class="middle">
+    <input type="checkbox" checked={{isActive}} {{action "changeStatus" on="change"}}/>
+    <p class="content">
+      {{input type="textarea" class="displayText" value=textContent disabled=isNotModify }}
+    </p>
+</div>
+<div class="bottom">
+    <p class="date">{{format-relative comment.date type="numeric" interval=10000}}</p>
+</div>
