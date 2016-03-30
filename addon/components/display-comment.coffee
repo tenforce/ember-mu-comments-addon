@@ -20,13 +20,10 @@ DisplayComment = Ember.Component.extend
   isActive: Ember.computed ->
     (@checkStatus is @get('comment').get('status'))
 
-  isNotAllowed: Ember.computed ->
-    (!@get('comment').get('isModifiable'))
-
 
   actions:
-    deleteComment: (idcomment) ->
-      @sendAction 'deleteComment', idcomment
+    deleteComment: (comment) ->
+      @sendAction 'deleteComment', comment
     changeModifyState: ->
       if !this.isNotModify
         if this.get('textContent') && this.get('textContent').length

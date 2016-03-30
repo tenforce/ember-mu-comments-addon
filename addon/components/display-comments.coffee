@@ -34,10 +34,10 @@ DisplayCommentsComponent = Ember.Component.extend(
         this.set('isDisplayed', false)
       else
         this.set('isDisplayed', true)
-    createComment: (newcomment) ->
-      newcomment.aboutId = this.get('about')
-      newcomment.date = new Date()
-      newc = @get('store').createRecord('comment', newcomment)
+    createComment: (comment) ->
+      comment.aboutId = this.get('about')
+      comment.date = new Date()
+      newc = @get('store').createRecord('comment', comment)
       newc.save()
       @getComments()
       return
@@ -46,8 +46,8 @@ DisplayCommentsComponent = Ember.Component.extend(
       comment?.destroyRecord()
       return
 
-    modifyComment: (modcomment) ->
-      modcomment.save()
+    modifyComment: (comment) ->
+      comment?.save()
       return
 
 )

@@ -1,8 +1,6 @@
 <div class="listcomments">
     <div class="newcomment">
-      {{#if isDescSort}}
         {{new-comment createComment="createComment"}}
-      {{/if}}
     </div>
   {{#each sortedComments as |comment|}}
       <div class="displaycomment">

@@ -6,16 +6,9 @@
 ListComment = Ember.Component.extend
   sortedComments: null
   sortProperties: null
-  sortLabel: null
-  isDescSort: true
   init: ->
     this._super()
-    if @isDescSort
-      this.set('sortProperties',['date:desc'])
-      this.set('sortLabel', "Desc")
-    else
-      @sortProperties= ['date:asc']
-      this.set('sortLabel', "Asc")
+    this.set('sortProperties',['date:desc'])
     @sortedComments = Ember.computed.sort('comments', 'sortProperties')
   layout: layout
   classNames:['list-comments']
