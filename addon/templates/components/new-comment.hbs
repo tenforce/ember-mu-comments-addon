@@ -1,8 +1,9 @@
 <div class="content">
     <p>
-      {{input type="textarea" class="newCommentText" value=newCommentContent name="commentContent" placeholder="Please insert your comment. "}}
+        <textarea onkeyup={{action "textContentModified"}} name="commentContent"
+                  class="newCommentText" placeholder="Please insert your comment. ">{{newCommentContent}}</textarea>
     </p>
 </div>
 <div class="newButton">
-    <button type="button" name="submitNewComment" id="submitNewComment" {{action "createComment" newCommentContent}}> Add comment </button>
+    <button type="button" name="submitNewComment" id="submitNewComment" {{action "createComment"}}> Add comment </button>
 </div>

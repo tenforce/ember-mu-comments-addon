@@ -34,6 +34,7 @@ DisplayCommentsComponent = Ember.Component.extend(
         this.set('isDisplayed', false)
       else
         this.set('isDisplayed', true)
+
     createComment: (comment) ->
       comment.aboutId = this.get('about')
       comment.date = new Date()

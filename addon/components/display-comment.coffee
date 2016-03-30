@@ -21,20 +21,38 @@ DisplayComment = Ember.Component.extend
     (@checkStatus is @get('comment').get('status'))
 
 
+  changeModifyState: ->
+    if !this.isNotModify
+      if this.get('textContent') && this.get('textContent').trim().length
+        console.log("not here dang it: "+this.get('textContent'))
+        this.set('isNotModify', true)
+        this.set('modValue', '-> Edit')
+        this.get('comment').set('content', this.get('textContent'))
+        @sendAction 'modifyComment', this.get('comment')
+      else #this.set('textContent', this.get('comment').get('content'))
+        buff = this.get('comment').get('content')
+        this.set('textContent', buff)
+        console.log("here : "+this.get('textContent'))
+      console.log("there : "+this.get('textContent'))
+    else
+      this.set('isNotModify', false)
+      this.set('modValue', '-> Save')
+
   actions:
     deleteComment: (comment) ->
       @sendAction 'deleteComment', comment
-    changeModifyState: ->
-      if !this.isNotModify
-        if this.get('textContent') && this.get('textContent').length
-          this.set('isNotModify', true)
-          this.set('modValue', '-> Edit')
-          this.get('comment').set('content', this.get('textContent'))
-          @sendAction 'modifyComment', this.get('comment')
-        else this.set('textContent', this.get('comment').get('content'))
+
+    textContentModified: (event) ->
+      if(event.keyCode == 13 && not event.shiftKey)
+        #notworking - event.preventDefault()
+        event.target.value = this.get('textContent')
+        this.changeModifyState()
+        return false
       else
-        this.set('isNotModify', false)
-        this.set('modValue', '-> Save')
+        this.set('textContent', event.target.value)
+
+    changeModifyState: ->
+      this.changeModifyState()
 
     changeStatus: ->
       if(this.get('comment').get('status') is "active")
