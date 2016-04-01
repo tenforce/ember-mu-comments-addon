@@ -24,16 +24,13 @@ DisplayComment = Ember.Component.extend
   changeModifyState: ->
     if !this.isNotModify
       if this.get('textContent') && this.get('textContent').trim().length
-        console.log("not here dang it: "+this.get('textContent'))
         this.set('isNotModify', true)
         this.set('modValue', '-> Edit')
         this.get('comment').set('content', this.get('textContent'))
         @sendAction 'modifyComment', this.get('comment')
-      else #this.set('textContent', this.get('comment').get('content'))
+      else 
         buff = this.get('comment').get('content')
         this.set('textContent', buff)
-        console.log("here : "+this.get('textContent'))
-      console.log("there : "+this.get('textContent'))
     else
       this.set('isNotModify', false)
       this.set('modValue', '-> Save')
