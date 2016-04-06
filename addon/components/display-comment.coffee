@@ -5,9 +5,9 @@
 DisplayComment = Ember.Component.extend
   layout: layout
   classNames:['display-comment']
-
+  classNameBindings:['editing:editMode']
+  editing: Ember.computed.not 'isNotModify'
   isNotModify: true
-  modValue: '-> Edit'
   textContent: ''
   commentUser: undefined
   checkStatus : 'active'
@@ -25,7 +25,6 @@ DisplayComment = Ember.Component.extend
     if !this.isNotModify
       if this.get('textContent') && this.get('textContent').trim().length
         this.set('isNotModify', true)
-        this.set('modValue', '-> Edit')
         this.get('comment').set('content', this.get('textContent'))
         @sendAction 'modifyComment', this.get('comment')
       else 
@@ -33,7 +32,6 @@ DisplayComment = Ember.Component.extend
         this.set('textContent', buff)
     else
       this.set('isNotModify', false)
-      this.set('modValue', '-> Save')
 
   actions:
     deleteComment: (comment) ->
