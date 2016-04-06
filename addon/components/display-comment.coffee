@@ -27,7 +27,7 @@ DisplayComment = Ember.Component.extend
         this.set('isNotModify', true)
         this.get('comment').set('content', this.get('textContent'))
         @sendAction 'modifyComment', this.get('comment')
-      else 
+      else
         buff = this.get('comment').get('content')
         this.set('textContent', buff)
     else
