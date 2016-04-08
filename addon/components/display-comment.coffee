@@ -11,6 +11,12 @@ DisplayComment = Ember.Component.extend
   textContent: ''
   commentUser: undefined
   checkStatus : 'active'
+
+  checked: Ember.computed "isActive", ->
+    if @get('isActive')
+      "checked"
+    else
+      "unchecked"
   init: ->
     @currUser = this.get('currentUser')
     @commentUser = this.get('comment').get('authorId')
@@ -39,7 +45,6 @@ DisplayComment = Ember.Component.extend
 
     textContentModified: (event) ->
       if(event.keyCode == 13 && not event.shiftKey)
-        #notworking - event.preventDefault()
         event.target.value = this.get('textContent')
         this.changeModifyState()
         return false

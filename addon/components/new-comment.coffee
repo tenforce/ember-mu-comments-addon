@@ -23,7 +23,7 @@ NewComment = Ember.Component.extend
       this.finishCreateComment()
       # TODO : How to clear the textArea after this?
 
-    textContentModified: () ->
+    textContentModified: (event) ->
       if(event.keyCode == 13 && not event.shiftKey)
         event.target.value = ""
         this.finishCreateComment(event)

@@ -38,6 +38,7 @@ DisplayCommentsComponent = Ember.Component.extend(
     createComment: (comment) ->
       comment.aboutId = this.get('about')
       comment.date = new Date()
+      comment.status = "inactive"
       newc = @get('store').createRecord('comment', comment)
       newc.save()
       @getComments()
