@@ -5,7 +5,6 @@
 DisplayComment = Ember.Component.extend
   layout: layout
   classNames:['display-comment']
-  classNameBindings:['editing:editMode']
   editing: Ember.computed.not 'isNotModify'
   isNotModify: true
   textContent: ''
@@ -23,7 +22,7 @@ DisplayComment = Ember.Component.extend
     @textContent = this.get('comment').get('content')
     this._super()
 
-  isActive: Ember.computed ->
+  isActive: Ember.computed "comment.status", ->
     (@checkStatus is @get('comment').get('status'))
 
 

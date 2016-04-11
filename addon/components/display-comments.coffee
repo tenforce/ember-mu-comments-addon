@@ -45,11 +45,17 @@ DisplayCommentsComponent = Ember.Component.extend(
       return
 
     deleteComment: (comment) ->
-      comment?.destroyRecord()
+      comment?.destroyRecord().then(=>
+        @getComments()
+      )
       return
 
     modifyComment: (comment) ->
-      comment?.save()
+      comment?.save().then(=>
+        @getComments()
+        #@sendAction('showComments')
+        #@sendAction('showComments')
+      )
       return
 
 )

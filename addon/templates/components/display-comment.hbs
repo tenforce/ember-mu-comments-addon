@@ -1,4 +1,4 @@
-<div class="displaycomment {{checked}}">
+<div class="displaycomment {{checked}} {{if editing 'editMode'}}">
   <div class="top">
       <p class="author">{{comment.authorLabel}}</p>
       <div class="buttons">
@@ -9,9 +9,9 @@
   </div>
 
   <div class="middle">
-      <div class="status" {{action "changeStatus"}}>
-          <!-- Should the checkbox disappear? -->
-        <input type="checkbox" checked={{isActive}} {{action "changeStatus" on="change"}}/>
+      <div class="status {{checked}}" {{action "changeStatus"}}>
+          <label for="status"></label>
+        <input type="checkbox" id="status" checked={{isActive}} {{action "changeStatus" on="change"}}/>
       </div>
       <p class="content">
           <textarea onkeyup={{action "textContentModified"}} class="displayText" disabled={{isNotModify}}>{{textContent}}</textarea>
