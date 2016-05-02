@@ -19,10 +19,13 @@ DisplayCommentsComponent = Ember.Component.extend(
     this._super()
 
   getComments: () -> (
-    @get('store').query('comment', filter:
-      type: 'about-id'
-      value: @get('about')
-      status: '"active","inactive"')
+    @get('store').query('comment',
+      filter:
+        type: 'about-id'
+        value: @get('about')
+        status: '"active","inactive"'
+      ## Have to use because otherwise IE caches the query and never fetches it again
+        timestamp: new Date())
     .then (result) =>
       @set 'comments', result
   )
