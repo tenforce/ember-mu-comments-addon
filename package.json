@@ -1,7 +1,7 @@
 {
   "name": "ember-mu-comments",
-  "version": "0.6.2",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.6.3",
+  "description": "An addon to display, add, edit and delete comments.",
   "directories": {
     "doc": "doc",
     "test": "tests"
