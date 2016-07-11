@@ -43,8 +43,8 @@ DisplayCommentsComponent = Ember.Component.extend(
       comment.date = new Date()
       comment.status = "inactive"
       newc = @get('store').createRecord('comment', comment)
-      newc.save()
-      @getComments()
+      newc.save().then =>
+        @getComments()
       return
 
     deleteComment: (comment) ->
@@ -56,8 +56,6 @@ DisplayCommentsComponent = Ember.Component.extend(
     modifyComment: (comment) ->
       comment?.save().then(=>
         @getComments()
-        #@sendAction('showComments')
-        #@sendAction('showComments')
       )
       return
 
