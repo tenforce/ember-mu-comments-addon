@@ -5,8 +5,10 @@ NewComment = Ember.Component.extend
   layout: layout
   classNames:['new-comment']
 
-  didInsertComponent: ->
+  didInsertElement: ->
     @set('newCommentContent', "")
+    Ember.run.next =>
+      this.$('#newCommentInput')[0].focus()
 
   finishCreateComment:  ->
     newcontent = this.get('newCommentContent')
