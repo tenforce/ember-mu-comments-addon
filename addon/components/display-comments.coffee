@@ -8,6 +8,7 @@ DisplayCommentsComponent = Ember.Component.extend(
   classNames:['display-comments']
   isDisplayed: false
   comments: undefined
+  buttonTabIndex: "-1"
 
   aboutChanged: Ember.observer('about', () ->
     @getComments()

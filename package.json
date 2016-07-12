@@ -1,6 +1,6 @@
 {
   "name": "ember-mu-comments",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "An addon to display, add, edit and delete comments.",
   "directories": {
     "doc": "doc",
