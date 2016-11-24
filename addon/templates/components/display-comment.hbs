@@ -1,23 +1,23 @@
 <div class="displaycomment {{checked}} {{if editing 'editMode'}}">
   <div class="top">
-      <p class="author">{{comment.authorLabel}}</p>
-      <div class="buttons">
-          <button type="button" name="modifyComment" class="edit" disabled={{not comment.isModifiable}} {{action "changeModifyState" }}></button>
-          <button type="button" name="deleteComment" class="remove" disabled={{not comment.isModifiable}} {{action "deleteComment" comment}}></button>
+    <p class="author">{{comment.authorLabel}}</p>
+    <div class="buttons">
+      <button type="button" name="modifyComment" class="edit" disabled={{not comment.isModifiable}} {{action "changeModifyState" }}></button>
+      <button type="button" name="deleteComment" class="remove" disabled={{not comment.isModifiable}} {{action "deleteComment" comment}}></button>
 
-      </div>
+    </div>
   </div>
 
   <div class="middle">
-      <div class="status {{checked}}" {{action "changeStatus"}}>
-          <label for="status"></label>
-        <input type="checkbox" id="status" checked={{isActive}} {{action "changeStatus" on="change"}}/>
-      </div>
-      <p class="content">
-          <textarea onkeyup={{action "textContentModified"}} class="displayText" disabled={{isNotModify}}>{{textContent}}</textarea>
-      </p>
+    <div class="status {{checked}}" disabled={{not comment.isModifiable}}>
+      <label for="status"></label>
+      <input type="checkbox" id="status" checked={{isActive}} {{action "changeStatus"}} disabled={{not comment.isModifiable}}/>
+    </div>
+    <p class="content">
+      <textarea onkeyup={{action "textContentModified"}} class="displayText" disabled={{isNotModify}}>{{textContent}}</textarea>
+    </p>
   </div>
   <div class="bottom">
-      <p class="date">{{format-relative comment.date type="numeric" interval=10000}}</p>
+    <p class="date">{{format-relative comment.date type="numeric" interval=10000}}</p>
   </div>
 </div>
