@@ -54,10 +54,11 @@ DisplayComment = Ember.Component.extend
       this.changeModifyState()
 
     changeStatus: ->
-      if(this.get('comment').get('status') is "active")
-        this.get('comment').set('status', 'inactive')
-      else
-        this.get('comment').set('status', 'active')
-      @sendAction 'modifyComment', this.get('comment')
+      if(this.get('comment.isModifiable'))
+        if(this.get('comment').get('status') is "active")
+          this.get('comment').set('status', 'inactive')
+        else
+          this.get('comment').set('status', 'active')
+        @sendAction 'modifyComment', this.get('comment')
 
 `export default DisplayComment;`

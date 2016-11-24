@@ -9,9 +9,9 @@
   </div>
 
   <div class="middle">
-    <div class="status {{checked}}" disabled={{not comment.isModifiable}}>
+    <div class="status {{checked}}" {{action "changeStatus"}} disabled={{not comment.isModifiable}}>
       <label for="status"></label>
-      <input type="checkbox" id="status" checked={{isActive}} {{action "changeStatus"}} disabled={{not comment.isModifiable}}/>
+      <input type="checkbox" checked={{isActive}} disabled={{not comment.isModifiable}}/>
     </div>
     <p class="content">
       <textarea onkeyup={{action "textContentModified"}} class="displayText" disabled={{isNotModify}}>{{textContent}}</textarea>
