@@ -1,23 +1,24 @@
-<div class="displaycomment {{checked}} {{if editing 'editMode'}}">
+<div class="displaycomment {{comment.status}} {{if editing 'editMode'}}">
   <div class="top">
-    <p class="author">{{comment.authorLabel}}</p>
+    <span class="author">{{await authorName}}</span>
     <div class="buttons">
-      <button type="button" name="modifyComment" class="edit" disabled={{not comment.isModifiable}} {{action "changeModifyState" }}></button>
-      <button type="button" name="deleteComment" class="remove" disabled={{not comment.isModifiable}} {{action "deleteComment" comment}}></button>
-
+      <button type="button" name="modifyComment" class="edit" disabled={{disable}} {{action "toggleEditing"}}>edit</button>
+      <button type="button" name="deleteComment" class="remove" disabled={{disable}} {{action "deleteComment" comment}}>delete</button>
+      {{#if loading}}
+        {{loadingPlaceholder}}
+      {{/if}}
     </div>
   </div>
 
   <div class="middle">
-    <div class="status {{checked}}" {{action "changeStatus"}} disabled={{not comment.isModifiable}}>
+    <div class="status {{comment.status}}">
       <label for="status"></label>
-      <input type="checkbox" checked={{isActive}} disabled={{not comment.isModifiable}}/>
+      {{input type="checkbox" checked=isSolved disabled=disable click=(action "changeStatus")}}
     </div>
-    <p class="content">
-      <textarea onkeyup={{action "textContentModified"}} class="displayText" disabled={{isNotModify}}>{{textContent}}</textarea>
-    </p>
+    {{textarea value=comment.message key-press="keyPress" disabled=(not editing)}}
   </div>
+
   <div class="bottom">
-    <p class="date">{{format-relative comment.date type="numeric" interval=10000}}</p>
+    <span class="date">{{format-relative comment.creationDate type="numeric" interval=1000}}</span>
   </div>
 </div>

@@ -1,12 +1,13 @@
-<button type="button" name="showComments" id="showComments" {{action "showComments"}} title="view comments" tabindex={{buttonTabIndex}}>
+{{#if loading}}
+  {{loadingPlaceholder}}
+{{else}}
+  <button type="button" name="showComments" id={{idbutton}} {{action "toggleDisplay"}} title={{tooltipTitle}} tabindex={{buttonTabIndex}}>
     <span>{{comments.length}}</span>
-</button>
-<div class="displayComments">
+  </button>
   {{#if isDisplayed}}
-    {{#tether-dialog close='showComments' hasOverlay=false clickOutsideToClose=true  target='#showComments' targetAttachment='bottom middle'
-    attachment='top right'}}
-      {{list-comments comments=comments createComment="createComment" deleteComment="deleteComment"
-      modifyComment="modifyComment"}}
+    {{#tether-dialog close='toggleDisplay' hasOverlay=false clickOutsideToClose=false target=(concat '#' idbutton)
+    targetAttachment='bottom middle' attachment='top right'}}
+      {{list-comments comments=comments user=user users=users about=about createComment="createComment" deleteComment="deleteComment"}}
     {{/tether-dialog}}
   {{/if}}
-</div>
+{{/if}}

@@ -1,9 +1,24 @@
 <div class="content">
-    <p>
-        <textarea onkeyup={{action "textContentModified"}} name="commentContent" autofocus="autofocus" id="newCommentInput"
-                  class="newCommentText" placeholder="Please insert your comment. " value={{newCommentContent}}></textarea>
-    </p>
+  {{textarea value=comment.message id="newCommentContent" name="newCommentContent" disabled=disableComment placeholder=textAreaPlaceholder key-press="keyPressComment"}}
+  <ul class="assigned-users">
+    {{#each assignedUsers as |user|}}
+      <li><span>{{user.name}}</span><button class="delete" {{action "removeAssigned" user}}>x</button></li>
+    {{/each}}
+  </ul>
+  {{#if searchingForUser}}
+    {{#modal-dialog renderInPlace=true}}
+      {{input type="text" id="userSearch" disabled=disableSearch value=searchString key-press="keyPressSearch"}}
+      <ul>
+        {{#each filteredUsers as |user|}}
+          <li {{action "addAssigned" user}}>{{user.name}}</li>
+        {{/each}}
+      </ul>
+    {{/modal-dialog}}
+    {{!#tether-dialog close='toggleModel' hasOverlay=false clickOutsideToClose=true target="#newCommentContent"
+    targetAttachment='bottom middle' attachment='top middle' zindex=100}}
+    {{!/tether-dialog}}
+  {{/if}}
 </div>
 <div class="newButton">
-    <button type="button" name="submitNewComment" id="submitNewComment" {{action "createComment"}}> Add comment </button>
+  <button type="button" name="submitNewComment" id="submitNewComment" {{action "createComment"}}>{{addButtonLabel}}</button>
 </div>

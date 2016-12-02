@@ -2,5 +2,9 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-mu-comments'
+  name: 'ember-mu-comments',
+
+  isDevelopingAddon: function() {
+    return true;
+  }
 };

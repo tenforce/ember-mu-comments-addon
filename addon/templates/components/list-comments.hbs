@@ -1,9 +1,5 @@
-<div class="listcomments">
-    <div class="newcomment">
-        {{new-comment createComment="createComment"}}
-    </div>
-  {{#each sortedComments as |comment|}}
-          <hr/>
-        {{display-comment comment=comment deleteComment="deleteComment" modifyComment="modifyComment"}}
-  {{/each}}
-</div>
+{{new-comment about=about user=user users=users createComment="createComment"}}
+{{#each sortedComments as |comment index|}}
+  <hr/>
+  {{display-comment comment=comment about=about user=user users=users index=index deleteComment="deleteComment"}}
+{{/each}}

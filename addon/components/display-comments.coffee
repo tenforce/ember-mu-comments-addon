@@ -2,62 +2,66 @@
 `import layout from '../templates/components/display-comments'`
 
 DisplayCommentsComponent = Ember.Component.extend(
-  store: Ember.inject.service()
-  intl: Ember.inject.service()
   layout: layout
   classNames:['display-comments']
+  store: Ember.inject.service()
+  intl: Ember.inject.service()
+  enums: Ember.inject.service("enums-utils")
+
+  init: ->
+    @get('intl').setLocale('en-us')
+    this._super()
+
+  aboutObserver: Ember.observer('about.id', () ->
+    @reinitialize()
+  ).on('init')
+
+  reinitialize: () ->
+    promises = []
+    promises.push @getComments()
+    promises.push @getUsers()
+    Ember.RSVP.Promise.all(promises).then =>
+      @set 'loading', false
+
   isDisplayed: false
   comments: undefined
   buttonTabIndex: "-1"
 
-  aboutChanged: Ember.observer('about', () ->
-    @getComments()
-  ).on('init')
 
-  init: ->
-    @get('intl').setLocale('en-us')
-    @get('about')
-    this._super()
+  getUsers: () ->
+    @get('store').query('user', {}).then (users) =>
+      @set 'users', users
 
   getComments: () -> (
     @get('store').query('comment',
       filter:
-        type: 'about-id'
-        value: @get('about')
-        status: '"active","inactive"'
-      ## Have to use because otherwise IE caches the query and never fetches it again
-        timestamp: new Date())
+        {
+          about:
+            id: @get('about.id')
+        }
+    )
     .then (result) =>
       @set 'comments', result
   )
 
+  idbutton: "showComments"
+  loading: true
+  loadingPlaceholder: Ember.computed ->
+    return Ember.String.htmlSafe("<i class=\"fa fa-spinner fa-pulse\"></i>")
+  tooltipTitle: "view comments"
 
   actions:
-    showComments: ->
-      if @isDisplayed
-        this.set('isDisplayed', false)
-      else
-        this.set('isDisplayed', true)
+    toggleDisplay: ->
+      @toggleProperty('isDisplayed')
 
     createComment: (comment) ->
-      comment.aboutId = this.get('about')
-      comment.date = new Date()
-      comment.status = "inactive"
-      newc = @get('store').createRecord('comment', comment)
-      newc.save().then =>
+      comment.save().then  =>
         @getComments()
       return
 
     deleteComment: (comment) ->
-      comment?.destroyRecord().then(=>
+      comment?.destroyRecord().then  =>
         @getComments()
-      )
-      return
-
-    modifyComment: (comment) ->
-      comment?.save().then(=>
-        @getComments()
-      )
       return
 
 )
