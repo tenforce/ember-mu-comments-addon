@@ -7,6 +7,7 @@
   {{#if isDisplayed}}
     {{#tether-dialog close='toggleDisplay' hasOverlay=false clickOutsideToClose=false target=(concat '#' idbutton)
     targetAttachment='bottom middle' attachment='top right'}}
+      <div class="close" {{action 'toggleDisplay'}}>x</div>
       {{list-comments comments=comments user=user users=users about=about createComment="createComment" deleteComment="deleteComment"}}
     {{/tether-dialog}}
   {{/if}}

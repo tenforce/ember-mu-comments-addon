@@ -8,13 +8,9 @@ ListComment = Ember.Component.extend
   sortProperties: ['creationDate:desc']
   sortedComments: Ember.computed.sort('comments', 'sortProperties')
 
-  sortComments: (a, b) ->
-    if a.get('creationDate') > b.get('creationDate') then return -1
-    else if a.get('creationDate') < b.get('creationDate') then return 1
-    else return 0
   actions:
-    createComment: (comment) ->
-      this.sendAction('createComment', comment)
+    createComment: (comment, assigned) ->
+      this.sendAction('createComment', comment, assigned)
     deleteComment: (comment) ->
       this.sendAction('deleteComment', comment)
 

@@ -1,36 +1,27 @@
 `import DS from 'ember-data'`
 
 CommentNotification = DS.Model.extend {
+  enums: Ember.inject.service("enums-utils")
+
   createdBy: DS.belongsTo('user')
-  createdWhen: DS.attr('date')
-  solved: DS.attr()
+  createdWhen: DS.attr('string')
+  solved: DS.attr('string')
   solvedBy: DS.belongsTo('user')
-  solvedWhen: DS.attr('date')
+  solvedWhen: DS.attr('string')
   comment: DS.belongsTo('comment')
   status: DS.attr('string')
   assignedTo: DS.belongsTo('user')
-
 
   setSolve: (who, time, bool) ->
     @set('solved', bool)
     @set('solvedBy', who)
     @set('solvedWhen', time)
-    @set('status', @get('statusShow'))
+    @set('status', @get('enums.status.show'))
     @save()
   solve: (who, time) ->
-    @setSolve(who, time, true)
+    @setSolve(who, time, "true")
   unsolve: (who, time) ->
-    @setSolve(who, time, false)
-
-  currentUser: Ember.inject.service()
-  user: Ember.computed.alias 'currentUser.user'
-  lastModifier: DS.belongsTo('user', inverse: null, async: false )
-  lastModified: DS.attr('string')
-  save: () ->
-    if not @get('isDeleted')
-      @set('lastModifier', @get('user'))
-      @set('lastModified', (new Date()).toISOString())
-    @_super(arguments...)
+    @setSolve(who, time, "false")
 }
 
 `export default CommentNotification`

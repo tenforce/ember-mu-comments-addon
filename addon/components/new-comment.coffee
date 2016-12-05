@@ -20,6 +20,7 @@ NewComment = Ember.Component.extend
       @$('textarea')[0]?.focus()
   newComment: ->
     @set('assignedUsers', [])
+    @set('searchString', '')
     @set('comment', @get('store').createRecord('comment'))
   textAreaPlaceholder: "Please enter your comment"
   addButtonLabel: "Add comment"
@@ -30,19 +31,22 @@ NewComment = Ember.Component.extend
   disableComment: false
   disableSearch: false
   previousKey: undefined
+  cursorPosition: undefined
   searchString: ""
   availableUsers: Ember.computed 'users', ->
     users = []
     @get('users').forEach (user) =>
       unless user.get('id') is @get('user.id') then users.push(user)
     return users
-  filteredUsers: Ember.computed 'availableUsers', 'searchString', ->
+  filteredUsers: Ember.computed 'availableUsers', 'searchString', 'assignedUsers.length', ->
     users = []
     searchString = @get('searchString')
     @get('availableUsers').forEach (user) =>
-      if searchString
-        if((user.get('name').indexOf(searchString)) > 0) then users.push(user)
-      else users.push(user)
+      if @get('assignedUsers').contains(user)
+      else
+        if searchString
+          if((user.get('name').indexOf(searchString)) > 0) then users.push(user)
+        else users.push(user)
     users
 
   creatingComment:  ->
@@ -52,19 +56,24 @@ NewComment = Ember.Component.extend
     comment.set('creationDate', (new Date()).toISOString())
     comment.set('author', @get('user'))
     comment.set('about', @get('about'))
-    # TODO : probably where we should generate the notifications
-    @sendAction 'createComment', comment
+    assigned = @get('assignedUsers')
+    @sendAction 'createComment', comment, assigned
     @newComment()
 
-
   beginSearch: ->
+    @set('cursorPosition', @$('textarea')[0].selectionStart || 0)
     @set('searchingForUser', true)
     @set('disableComment', true)
     Ember.run.next =>
       @$('#userSearch')[0]?.focus()
+
   endSearch: ->
     firstmatch = @get('filteredUsers')[0]
     if firstmatch then @finishAddAssigned(firstmatch)
+    @finishCloseSearch()
+
+  finishCloseSearch: ->
+    @set('searchString', '')
     @set('searchingForUser', false)
     @set('disableComment', false)
     Ember.run.next =>
@@ -72,17 +81,24 @@ NewComment = Ember.Component.extend
 
   finishAddAssigned: (user) ->
     unless @get('assignedUsers').contains(user) then @get('assignedUsers').pushObject(user)
-    @get
+    cursPos = @get('cursorPosition')
+    newstring = "#{@get('comment.message').substr(0, cursPos)}\"#{(user.get('name') || "anonymous")}\"#{@get('comment.message').substr(cursPos)}"
+    @set('comment.message', newstring)
+
   finishRemoveAssigned: (user) ->
     @get('assignedUsers').removeObject(user)
+
   actions:
+    closeSearch: ->
+      @finishCloseSearch()
     keyPressComment: () ->
       if(event.keyCode == 13 && not event.shiftKey)
         event.preventDefault()
         @creatingComment()
       else
-        debugger
-        if event.key is ":" and @get('previousKey') is "@" then @beginSearch()
+        if event.key is ":" and @get('previousKey') is "@"
+          event.preventDefault()
+          @beginSearch()
       @set('previousKey', event.key)
     keyPressSearch: () ->
       if(event.keyCode == 13 && not event.shiftKey)

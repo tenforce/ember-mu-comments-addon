@@ -4,6 +4,7 @@
 DisplayComment = Ember.Component.extend
   layout: layout
   classNames:['display-comment']
+  classNameBindings: ['comment.status', 'editing:editMode']
   enums: Ember.inject.service("enums-utils")
 
   author: Ember.computed.alias 'comment.author'
@@ -25,7 +26,7 @@ DisplayComment = Ember.Component.extend
   finishEditing: ->
     @set('loading', true)
     @set('editing', false)
-    @set('comment.lastModified', new Date().toISOString())
+    @set('comment.modificationDate', new Date().toISOString())
     @get('comment').save().then =>
       unless @get('isDestroyed') then @set 'loading', false
     return @get('comment')

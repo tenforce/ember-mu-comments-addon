@@ -1,0 +1,22 @@
+{{#if loading}}
+  {{loadingPlaceholder}}
+{{else}}
+  <button type="button" name="showNotifications" id={{idbutton}} {{action "toggleDisplay"}} title={{tooltipTitle}} tabindex={{buttonTabIndex}}>
+    <span>{{combinedLength}}</span>
+  </button>
+  {{#if isDisplayed}}
+    {{#tether-dialog close='toggleDisplay' hasOverlay=false clickOutsideToClose=false target=(concat '#' idbutton)
+    targetAttachment='bottom middle' attachment='top middle'}}
+      <div class="close" {{action 'toggleDisplay'}}>x</div>
+      <div class="selector">
+        <ul class="menu">
+          <li selected="{{if (eq display "source") true false}}" {{action "toDisplay" "source"}}>
+            <span class="option">Source notifications</span><span class="count">{{sourceNotifications.length}}</span></li>
+          <li selected="{{if (eq display "target") true false}}" {{action "toDisplay" "target"}}>
+            <span class="option">Target notifications</span><span class="count">{{targetNotifications.length}}</span></li>
+        </ul>
+      </div>
+      {{list-notifications notifications=displayNotifications}}
+    {{/tether-dialog}}
+  {{/if}}
+{{/if}}

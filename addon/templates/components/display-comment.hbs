@@ -1,24 +1,23 @@
-<div class="displaycomment {{comment.status}} {{if editing 'editMode'}}">
-  <div class="top">
-    <span class="author">{{await authorName}}</span>
-    <div class="buttons">
+<div class="top">
+  <span class="author">{{await authorName}}</span>
+  <div class="buttons">
+    {{#if loading}}
+      {{loadingPlaceholder}}
+    {{else}}
       <button type="button" name="modifyComment" class="edit" disabled={{disable}} {{action "toggleEditing"}}>edit</button>
       <button type="button" name="deleteComment" class="remove" disabled={{disable}} {{action "deleteComment" comment}}>delete</button>
-      {{#if loading}}
-        {{loadingPlaceholder}}
-      {{/if}}
-    </div>
+    {{/if}}
   </div>
+</div>
 
-  <div class="middle">
-    <div class="status {{comment.status}}">
-      <label for="status"></label>
-      {{input type="checkbox" checked=isSolved disabled=disable click=(action "changeStatus")}}
-    </div>
-    {{textarea value=comment.message key-press="keyPress" disabled=(not editing)}}
+<div class="middle">
+  <div class="status {{comment.status}}">
+    <label for="status"></label>
+    {{input type="checkbox" checked=isSolved disabled=disable click=(action "changeStatus")}}
   </div>
+  {{textarea value=comment.message key-press="keyPress" disabled=(not editing)}}
+</div>
 
-  <div class="bottom">
-    <span class="date">{{format-relative comment.creationDate type="numeric" interval=1000}}</span>
-  </div>
+<div class="bottom">
+  <span class="date">{{format-relative comment.creationDate type="numeric" interval=1000}}</span>
 </div>

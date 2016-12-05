@@ -1,0 +1,23 @@
+{{#if emptyNotifications}}
+  No notifications yet
+{{else}}
+  <div class="options">
+
+  </div>
+  <table>
+    <tr>
+      <th>Created by</th>
+      <th>Created when</th>
+      <th>Solved</th>
+      <th>Solved by</th>
+      <th>Solved when</th>
+      <th>Comment</th>
+      <th>Status</th>
+      <th>Assigned to</th>
+      <th></th>
+    </tr>
+    {{#each notifications as |notification index|}}
+      {{display-notification notification=notification index=index}}
+    {{/each}}
+  </table>
+{{/if}}

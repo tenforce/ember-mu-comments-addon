@@ -39,6 +39,7 @@ DisplayCommentsComponent = Ember.Component.extend(
           about:
             id: @get('about.id')
         }
+      include: "notifications"
     )
     .then (result) =>
       @set 'comments', result
@@ -54,8 +55,18 @@ DisplayCommentsComponent = Ember.Component.extend(
     toggleDisplay: ->
       @toggleProperty('isDisplayed')
 
-    createComment: (comment) ->
-      comment.save().then  =>
+    createComment: (comment, assigned) ->
+      comment.save().then (persistedComment) =>
+        assigned?.forEach (toNotify) =>
+          assignment = @get('store').createRecord('comment-notification')
+          assignment.set('createdBy', persistedComment.get('author'))
+          assignment.set('createdWhen', new Date().toISOString())
+          assignment.set('solved', "false")
+          assignment.set('comment', persistedComment)
+          assignment.set('status', @get('enums.status.show'))
+          assignment.set('assignedTo', toNotify)
+          assignment.save().then (persistedNotification) =>
+            persistedComment.get('notifications').pushObject(persistedNotification)
         @getComments()
       return
 

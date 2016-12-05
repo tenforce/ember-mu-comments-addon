@@ -1,4 +1,4 @@
-{{new-comment about=about user=user users=users createComment="createComment"}}
+{{new-comment about=about user=user users=users createComment="createComment" index="new"}}
 {{#each sortedComments as |comment index|}}
   <hr/>
   {{display-comment comment=comment about=about user=user users=users index=index deleteComment="deleteComment"}}

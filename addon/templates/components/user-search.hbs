@@ -1,0 +1,9 @@
+{{#modal-dialog renderInPlace=true}}
+  {{input type="text" id=(concat "userSearch" index) disabled=disableSearch value=searchString key-press="keyPressSearch"}}
+  <button class="close" {{action "closeSearch"}}>Close</button>
+  <ul>
+    {{#each filteredUsers as |user|}}
+      <li {{action "addAssigned" user}}>{{user.name}}</li>
+    {{/each}}
+  </ul>
+{{/modal-dialog}}
