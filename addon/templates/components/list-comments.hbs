@@ -1,5 +1,5 @@
-{{new-comment about=about user=user users=users createComment="createComment" index="new"}}
+{{new-comment about=about user=user users=users refresh="refresh" index="new"}}
 {{#each sortedComments as |comment index|}}
   <hr/>
-  {{display-comment comment=comment about=about user=user users=users index=index deleteComment="deleteComment"}}
+  {{display-comment comment=comment about=about user=user users=users index=index refresh="refresh"}}
 {{/each}}

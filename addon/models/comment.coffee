@@ -41,4 +41,5 @@ Comment = DS.Model.extend
       notification.destroyRecord()
     @_super(arguments...)
 
+
 `export default Comment;`

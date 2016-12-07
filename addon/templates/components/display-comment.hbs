@@ -15,9 +15,22 @@
     <label for="status"></label>
     {{input type="checkbox" checked=isSolved disabled=disable click=(action "changeStatus")}}
   </div>
-  {{textarea value=comment.message key-press="keyPress" disabled=(not editing)}}
+  {{textarea value=comment.message key-press="keyPress" disabled=shouldDisableTextArea}}
+  {{#if editing}}
+    <ul class="assigned-users">
+      {{#each assignedUsers as |user|}}
+        <li><span>{{user.name}}</span> <button class="delete" {{action "removeAssigned" user}}>x</button></li>
+      {{/each}}
+    </ul>
+    {{#if searchingForUser}}
+      {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=multiAdds addAssigned="addAssigned" closeSearch="closeSearch"}}
+    {{/if}}
+  {{/if}}
 </div>
 
 <div class="bottom">
-  <span class="date">{{format-relative comment.creationDate type="numeric" interval=1000}}</span>
+  <span class="creation-date">Created {{format-relative comment.creationDate type="numeric" interval=1000}}</span>
+  {{#if comment.modificationDate}}
+    <span class="modification-date">Modified {{format-relative comment.modificationDate type="numeric" interval=1000}}</span>
+  {{/if}}
 </div>

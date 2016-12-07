@@ -1,11 +1,13 @@
 `import Ember from 'ember';`
 `import layout from '../templates/components/display-comment';`
+`import SearchUtils from '../mixins/search-utils'`
 
-DisplayComment = Ember.Component.extend
+DisplayComment = Ember.Component.extend SearchUtils,
   layout: layout
   classNames:['display-comment']
   classNameBindings: ['comment.status', 'editing:editMode']
   enums: Ember.inject.service("enums-utils")
+  store: Ember.inject.service()
 
   author: Ember.computed.alias 'comment.author'
   authorName: Ember.computed 'author', ->
@@ -23,20 +25,41 @@ DisplayComment = Ember.Component.extend
     else return false
   disable: Ember.computed.or 'allowedModification', 'loading'
 
+  ensureAssigned: (date) ->
+    promises = []
+    comment = @get('comment')
+    assignedUsers = @get('assignedUsers')
+    comment.get('notifications').forEach (notification) =>
+      promises.push(notification.destroyRecord())
+    Ember.RSVP.Promise.all(promises).then =>
+      unless date then date = new Date().toISOString()
+      assignedUsers.forEach (user) =>
+        assignment = @get('store').createRecord('comment-notification')
+        assignment.set('createdBy', comment.get('author'))
+        assignment.set('createdWhen', date)
+        assignment.set('solved', "false")
+        assignment.set('comment', comment)
+        assignment.set('status', @get('enums.status.show'))
+        assignment.set('assignedTo', user)
+        assignment.save().then (persistedNotification) =>
+          comment.get('notifications').pushObject(persistedNotification)
+
+  handleEnter: ->
+    @finishEditing()
   finishEditing: ->
     @set('loading', true)
     @set('editing', false)
-    @set('comment.modificationDate', new Date().toISOString())
+    date = new Date().toISOString()
+    @set('comment.modificationDate', date)
     @get('comment').save().then =>
-      unless @get('isDestroyed') then @set 'loading', false
+      @ensureAssigned(date).then =>
+        unless @get('isDestroyed') then @set 'loading', false
     return @get('comment')
 
   finishChangeStatus: ->
     unless(this.get('disable'))
-      if(this.get('comment.status') is @get('enums.status.unsolved'))
-        this.set('comment.status', @get('enums.status.solved'))
-      else if(this.get('comment.status') is @get('enums.status.solved'))
-        this.set('comment.status', @get('enums.status.unsolved'))
+      if(this.get('comment.status') is @get('enums.status.unsolved')) then this.set('comment.status', @get('enums.status.solved'))
+      else if(this.get('comment.status') is @get('enums.status.solved')) then this.set('comment.status', @get('enums.status.unsolved'))
       @set('loading', true)
       @set('editing', false)
       promises = []
@@ -53,14 +76,25 @@ DisplayComment = Ember.Component.extend
         unless @get('isDestroyed') then @set 'loading', false
       return @get('comment')
 
+  shouldDisableTextArea: Ember.computed 'editing', 'disableComment', ->
+    if not @get('editing') or @get('disableComment') then return true
+
+  assignedUsersSetter: Ember.observer('comment.id', () ->
+    promises = []
+    @get('comment.notifications').forEach (notification) ->
+      promises.push(notification.get('assignedTo'))
+    users = []
+    Ember.RSVP.Promise.all(promises).then (assigned) =>
+      assigned.forEach (user) ->
+        unless users.contains(user) then users.push(user)
+      @set('assignedUsers', users)
+  ).on('init')
+  assignedUsers: undefined
+
   actions:
     deleteComment: (comment) ->
-      @sendAction 'deleteComment', comment
-
-    keyPress: () ->
-      if(event.keyCode == 13 && not event.shiftKey)
-        event.preventDefault()
-        @finishEditing()
+      comment?.destroyRecord().then =>
+        @sendAction('refresh')
 
     toggleEditing: () ->
       if @get('editing') then @finishEditing()

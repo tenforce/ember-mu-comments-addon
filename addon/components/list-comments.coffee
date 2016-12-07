@@ -9,10 +9,8 @@ ListComment = Ember.Component.extend
   sortedComments: Ember.computed.sort('comments', 'sortProperties')
 
   actions:
-    createComment: (comment, assigned) ->
-      this.sendAction('createComment', comment, assigned)
-    deleteComment: (comment) ->
-      this.sendAction('deleteComment', comment)
+    refresh: ->
+      @sendAction('refresh')
 
 
 `export default ListComment;`

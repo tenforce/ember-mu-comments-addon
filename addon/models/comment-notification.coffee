@@ -22,6 +22,7 @@ CommentNotification = DS.Model.extend {
     @setSolve(who, time, "true")
   unsolve: (who, time) ->
     @setSolve(who, time, "false")
+
 }
 
 `export default CommentNotification`

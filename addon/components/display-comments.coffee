@@ -7,6 +7,20 @@ DisplayCommentsComponent = Ember.Component.extend(
   store: Ember.inject.service()
   intl: Ember.inject.service()
   enums: Ember.inject.service("enums-utils")
+  refresher: Ember.inject.service("refresher-tool")
+
+  buttonTabIndex: "-1"
+  idbutton: "showComments"
+  isDisplayed: false
+  comments: Ember.computed.alias 'refresher.comments'
+  users: Ember.computed.alias 'refresher.users'
+
+  loading: Ember.computed 'refresher.comments', ->
+    if @get('refresher.comments') then return false
+    else return true
+  loadingPlaceholder: Ember.computed ->
+    return Ember.String.htmlSafe("<i class=\"fa fa-spinner fa-pulse\"></i>")
+  tooltipTitle: "view comments"
 
   init: ->
     @get('intl').setLocale('en-us')
@@ -17,63 +31,18 @@ DisplayCommentsComponent = Ember.Component.extend(
   ).on('init')
 
   reinitialize: () ->
-    promises = []
-    promises.push @getComments()
-    promises.push @getUsers()
-    Ember.RSVP.Promise.all(promises).then =>
-      @set 'loading', false
+    @set('refresher.about', @get('about'))
 
-  isDisplayed: false
-  comments: undefined
-  buttonTabIndex: "-1"
-
-
-  getUsers: () ->
-    @get('store').query('user', {}).then (users) =>
-      @set 'users', users
-
-  getComments: () -> (
-    @get('store').query('comment',
-      filter:
-        {
-          about:
-            id: @get('about.id')
-        }
-      include: "notifications"
-    )
-    .then (result) =>
-      @set 'comments', result
-  )
-
-  idbutton: "showComments"
-  loading: true
-  loadingPlaceholder: Ember.computed ->
-    return Ember.String.htmlSafe("<i class=\"fa fa-spinner fa-pulse\"></i>")
-  tooltipTitle: "view comments"
+  finishGetComments: () ->
+    @get('refresher')?.refreshComments().then =>
+      @get('refresher')?.refreshNotifications()
 
   actions:
     toggleDisplay: ->
       @toggleProperty('isDisplayed')
 
-    createComment: (comment, assigned) ->
-      comment.save().then (persistedComment) =>
-        assigned?.forEach (toNotify) =>
-          assignment = @get('store').createRecord('comment-notification')
-          assignment.set('createdBy', persistedComment.get('author'))
-          assignment.set('createdWhen', new Date().toISOString())
-          assignment.set('solved', "false")
-          assignment.set('comment', persistedComment)
-          assignment.set('status', @get('enums.status.show'))
-          assignment.set('assignedTo', toNotify)
-          assignment.save().then (persistedNotification) =>
-            persistedComment.get('notifications').pushObject(persistedNotification)
-        @getComments()
-      return
-
-    deleteComment: (comment) ->
-      comment?.destroyRecord().then  =>
-        @getComments()
-      return
+    refresh: ->
+      @finishGetComments()
 
 )
 

@@ -5,28 +5,15 @@ DisplayNotificationsComponent = Ember.Component.extend(
   layout: layout
   classNames:['display-notifications']
   store: Ember.inject.service()
+  refresher: Ember.inject.service("refresher-tool")
 
   idbutton: "showNotifications"
-  loading: true
+  loading: Ember.computed 'refresher.sourceNotifications', 'refresher.targetNotifications', ->
+    if @get('refresher.sourceNotifications') and @get('refresher.targetNotifications') then return false
+    else return true
   loadingPlaceholder: Ember.computed ->
     return Ember.String.htmlSafe("<i class=\"fa fa-spinner fa-pulse\"></i>")
   tooltipTitle: "view comments"
-
-  userObserver: Ember.observer('user.id', () ->
-    @reinitialize()
-  ).on('init')
-
-  reinitialize: () ->
-    promises = []
-    promises.push @getSourceNotifications()
-    promises.push @getTargetNotifications()
-    Ember.RSVP.Promise.all(promises).then =>
-      @set 'loading', false
-  fetchNotifications: () ->
-    promises = []
-    promises.push @getSourceNotifications()
-    promises.push @getTargetNotifications()
-    Ember.RSVP.Promise.all(promises)
 
   isDisplayed: false
   sourceNotifications: undefined
@@ -35,32 +22,22 @@ DisplayNotificationsComponent = Ember.Component.extend(
     @get('sourceNotifications.length') + @get('targetNotifications.length')
   buttonTabIndex: "-1"
 
-
-  getSourceNotifications: () ->
-    @get('store').query('comment-notification',
-      filter:
-        {
-          "created-by":
-            id: @get('user.id')
-        }
-    )
-    .then (result) =>
-      @set 'sourceNotifications', result
-  getTargetNotifications: () ->
-    @get('store').query('comment-notification',
-      filter:
-        {
-          "assigned-to":
-            id: @get('user.id')
-        }
-    )
-    .then (result) =>
-      @set 'targetNotifications', result
   display: "source"
   displayNotifications: Ember.computed 'display', 'sourceNotifications', 'targetNotifications', ->
     if 'source' is @get('display') then @get('sourceNotifications')
     else if 'target' is @get('display') then @get('targetNotifications')
     else []
+
+  sourceNotifications: Ember.computed.alias 'refresher.sourceNotifications'
+  targetNotifications: Ember.computed.alias 'refresher.targetNotifications'
+
+  userObserver: Ember.observer('user.id', () ->
+    @reinitialize()
+  ).on('init')
+
+  reinitialize: () ->
+    @set('refresher.user', @get('user'))
+
 
   actions:
     toDisplay: (display) ->

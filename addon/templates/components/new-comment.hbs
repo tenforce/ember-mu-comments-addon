@@ -1,20 +1,12 @@
 <div class="content">
-  {{textarea value=comment.message id="newCommentContent" name="newCommentContent" disabled=disableComment placeholder=textAreaPlaceholder key-press="keyPressComment"}}
+  {{textarea value=comment.message id="newCommentContent" name="newCommentContent" disabled=disableComment placeholder=textAreaPlaceholder key-press="keyPress"}}
   <ul class="assigned-users">
     {{#each assignedUsers as |user|}}
       <li><span>{{user.name}}</span> <button class="delete" {{action "removeAssigned" user}}>x</button></li>
     {{/each}}
   </ul>
   {{#if searchingForUser}}
-    {{#modal-dialog renderInPlace=true}}
-      {{input type="text" id=(concat "userSearch" index) disabled=disableSearch value=searchString key-press="keyPressSearch"}}
-      <button class="close" {{action "closeSearch"}}>Close</button>
-      <ul>
-        {{#each filteredUsers as |user|}}
-          <li {{action "addAssigned" user}}>{{user.name}}</li>
-        {{/each}}
-      </ul>
-    {{/modal-dialog}}
+    {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=multiAdds addAssigned="addAssigned" closeSearch="closeSearch"}}
   {{/if}}
 </div>
 <div class="newButton">
