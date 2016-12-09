@@ -23,26 +23,62 @@ DisplayComment = Ember.Component.extend SearchUtils,
   allowModification: Ember.computed 'user', 'author', ->
     if @get('user.id') is @get('author.id') then return true
     else return false
-  disable: Ember.computed.or 'allowedModification', 'loading'
+  disable: Ember.computed 'allowModification', 'loading', ->
+    if @get('loading') then return true
+    else unless @get('allowModification') then return true
+    return false
+  disableCheckbox: Ember.computed 'loading', 'comment.notification.assignments.@each.assignedTo', ->
+    if @get('loading') then return true
+    else
+      ret = true
+      @get('comment.notification.assignments')?.forEach (assignment) =>
+        if @get('user.id') is assignment.get('assignedTo.id')
+          ret = false
+          return ret
+      ret
 
+  # used to make sure we have a notification to use
+  ensureNotification: (date) ->
+    @get('comment.notification').then (notification) =>
+      if notification
+        notification.set('comment', @get('comment'))
+        notification.set('createdBy', @get('user'))
+        notification.set('createdWhen', date)
+        notification.set('status', @get('enums.status.show'))
+        return notification
+      else
+        notification =  @get('store').createRecord('comment-notification')
+        notification.set('comment', @get('comment'))
+        notification.set('createdBy', @get('user'))
+        notification.set('createdWhen', date)
+        notification.set('status', @get('enums.status.show'))
+        return notification
+
+  # this will remove and then regenerate assignments / notification if needed
   ensureAssigned: (date) ->
+    unless date then date = new Date().toISOString()
     promises = []
     comment = @get('comment')
     assignedUsers = @get('assignedUsers')
-    comment.get('notifications').forEach (notification) =>
-      promises.push(notification.destroyRecord())
-    Ember.RSVP.Promise.all(promises).then =>
-      unless date then date = new Date().toISOString()
-      assignedUsers.forEach (user) =>
-        assignment = @get('store').createRecord('comment-notification')
-        assignment.set('createdBy', comment.get('author'))
-        assignment.set('createdWhen', date)
-        assignment.set('solved', "false")
-        assignment.set('comment', comment)
-        assignment.set('status', @get('enums.status.show'))
-        assignment.set('assignedTo', user)
-        assignment.save().then (persistedNotification) =>
-          comment.get('notifications').pushObject(persistedNotification)
+    @ensureNotification(date).then (notification) =>
+      notification.get('assignments')?.forEach (assignment) =>
+        # first we delete the existing assignments
+        promises.push(assignment.destroyRecord())
+      Ember.RSVP.Promise.all(promises).then =>
+        # if we don't have anyone to warn, there's no point in having a notification
+        if assignedUsers.get('length') is 0
+            notification?.destroyRecord()
+        else
+          # otherwise, we first need to save the notification then we can create assignments as they will need the notification-uuid
+          notification.save().then (notif) =>
+            comment.set('notification', notif)
+            assignedUsers.forEach (user) =>
+              assignment = @get('store').createRecord('notification-assignment')
+              assignment.set('notification', notif)
+              assignment.set('status', @get('enums.status.show'))
+              assignment.set('assignedTo', user)
+              assignment.save().then (persistedAssignment) =>
+                comment.get('notification.assignments')?.pushObject(persistedAssignment)
 
   handleEnter: ->
     @finishEditing()
@@ -57,37 +93,47 @@ DisplayComment = Ember.Component.extend SearchUtils,
     return @get('comment')
 
   finishChangeStatus: ->
-    unless(this.get('disable'))
-      if(this.get('comment.status') is @get('enums.status.unsolved')) then this.set('comment.status', @get('enums.status.solved'))
-      else if(this.get('comment.status') is @get('enums.status.solved')) then this.set('comment.status', @get('enums.status.unsolved'))
+    unless(@get('disableCheckbox'))
+      if(@get('comment.status') is @get('enums.status.unsolved')) then @set('comment.status', @get('enums.status.solved'))
+      else if(@get('comment.status') is @get('enums.status.solved')) then @set('comment.status', @get('enums.status.unsolved'))
       @set('loading', true)
       @set('editing', false)
       promises = []
       user = @get('user')
       status = @get('comment.status')
-      @get('comment.notifications').then (notifications) =>
-        notifications.forEach (notification) =>
+      date = new Date().toISOString()
+      @get('comment.notification').then (notification) =>
+          # first we need to change change the solved status of the notification
           if status is @get('enums.status.solved')
-            promises.push(notification.solve(user, new Date().toISOString()))
+            promises.push(notification.solve(user, date))
           else if status is @get('enums.status.unsolved')
-            promises.push(notification.unsolve(user, new Date().toISOString()))
+            promises.push(notification.unsolve(user, date))
+          # then we iterate through all assignments and reset their status to "show"
+          notification.get('assignments').forEach (assignment) =>
+            assignment.set('status', @get('enums.status.show')
+            promises.push(assignment.save()))
+
       promises.push(@get('comment').save())
       Ember.RSVP.Promise.all(promises).then =>
         unless @get('isDestroyed') then @set 'loading', false
       return @get('comment')
 
+  # we should disable the textarea when we're editing or when we're searching for a user
   shouldDisableTextArea: Ember.computed 'editing', 'disableComment', ->
     if not @get('editing') or @get('disableComment') then return true
 
+  # fetching the list of already assigned users on startup
   assignedUsersSetter: Ember.observer('comment.id', () ->
     promises = []
-    @get('comment.notifications').forEach (notification) ->
-      promises.push(notification.get('assignedTo'))
-    users = []
-    Ember.RSVP.Promise.all(promises).then (assigned) =>
-      assigned.forEach (user) ->
-        unless users.contains(user) then users.push(user)
-      @set('assignedUsers', users)
+    unless @get('comment.notification.assignments') then @set('assignedUsers', [])
+    else
+      @get('comment.notification.assignments').forEach (notification) ->
+        promises.push(notification.get('assignedTo'))
+      users = []
+      Ember.RSVP.Promise.all(promises).then (assigned) =>
+        assigned.forEach (user) ->
+          unless users.contains(user) then users.push(user)
+        @set('assignedUsers', users)
   ).on('init')
   assignedUsers: undefined
 

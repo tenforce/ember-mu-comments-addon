@@ -2,19 +2,19 @@
   <i class="fa {{if (eq showHidden true) 'fa-toggle-on' 'fa-toggle-off'}}" {{action 'toggleShowHidden'}}></i>
   <span>{{#if (eq showHidden true)}}Hidden notifications are shown{{else}}Hidden notifications are not shown{{/if}}</span>
 </div>
-{{#if emptyNotifications}}
+{{#if emptyAssignments}}
   No notifications to display
 {{else}}
   <table>
     <tr>
       <th>Comment</th>
       <th>Concept</th>
-      <th>Assigned to</th>
+      <th>From</th>
       <th>Solved</th>
       <th>Hide / Show</th>
     </tr>
-    {{#each notifications as |notification index|}}
-      {{display-notification notification=notification index=index handleClick="handleClick"}}
+    {{#each assignments as |assignment index|}}
+      {{display-assignment assignment=assignment index=index handleClick="handleClick"}}
     {{/each}}
   </table>
 {{/if}}

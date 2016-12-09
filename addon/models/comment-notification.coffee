@@ -8,9 +8,9 @@ CommentNotification = DS.Model.extend {
   solved: DS.attr('string')
   solvedBy: DS.belongsTo('user')
   solvedWhen: DS.attr('string')
-  comment: DS.belongsTo('comment')
   status: DS.attr('string')
-  assignedTo: DS.belongsTo('user')
+  comment: DS.belongsTo('comment')
+  assignments: DS.hasMany('notification-assignment', {inverse:null})
 
   setSolve: (who, time, bool) ->
     @set('solved', bool)
@@ -23,6 +23,10 @@ CommentNotification = DS.Model.extend {
   unsolve: (who, time) ->
     @setSolve(who, time, "false")
 
+  destroyRecord: () ->
+    @get('assignments').forEach (assignment) ->
+      assignment.destroyRecord()
+    @_super(arguments...)
 }
 
 `export default CommentNotification`

@@ -7,34 +7,35 @@ RefresherToolService = Ember.Service.extend
   refreshingComments: true
   refreshingNotifications: true
 
+  # we need to refresh comments when the concept has changed
   aboutObserver: Ember.observer('about.id', () ->
     @refreshComments()
   ).on('init')
 
+  # we need to refresh the notifications when the user has changed (which shouldn't happen but hey)
   userObserver: Ember.observer('user.id', () ->
     @refreshNotifications()
   ).on('init')
 
-  refreshComments: (schedule) ->
+  # refresh comments then poll again in x milliseconds
+  refreshComments: () ->
     @set('refreshingComments', true)
     promises = []
     promises.push(@getUsers())
     promises.push(@getComments())
-    ret = Ember.RSVP.Promise.all(promises).then =>
+    Ember.RSVP.Promise.all(promises).then =>
       @set('refreshingComments', false)
-    if schedule
-      Ember.run.later(@refreshComments, 60000)
-    ret
-  refreshNotifications: (schedule) ->
+      Ember.run.later(@, @refreshComments, 30000)
+
+  # refresh notifications then poll again in x milliseconds
+  refreshNotifications: () ->
     @set('refreshingNotifications', true)
     promises = []
     promises.push(@getSourceNotifications())
     promises.push(@getTargetNotifications())
-    ret = Ember.RSVP.Promise.all(promises).then =>
+    Ember.RSVP.Promise.all(promises).then =>
       @set('refreshingNotifications', false)
-    if schedule
-      Ember.run.later(@refreshNotifications, 60000)
-    ret
+      Ember.run.later(@, @refreshNotifications, 30000)
 
   getUsers: () ->
     @get('store').query('user', {}).then (users) =>
@@ -45,7 +46,7 @@ RefresherToolService = Ember.Service.extend
       filter:
           about:
             id: @get('about.id')
-      include: "notifications.assigned-to,notifications.created-by"
+      include: "notification.assignments.assigned-to,notification.created-by"
     )
     .then (result) =>
       @set 'comments', result
@@ -58,14 +59,38 @@ RefresherToolService = Ember.Service.extend
           id: @get('user.id')
     )
     .then (result) =>
-      @set 'sourceNotifications', result
+      @set 'unfilteredSourceNotifications', result
   getTargetNotifications: () ->
-    @get('store').query('comment-notification',
+    @get('store').query('notification-assignment',
       filter:
         "assigned-to":
           id: @get('user.id')
     )
     .then (result) =>
-      @set 'targetNotifications', result
+      @set 'unfilteredTargetNotifications', result
+
+  combinedLength: Ember.computed 'filteredSourceNotifications.length', 'filteredTargetNotifications.length', ->
+    @get('filteredSourceNotifications.length') + @get('filteredTargetNotifications.length')
+
+  # this bool can be modified from anything using the service
+  shouldFilterNotificationsOnStatus: true
+
+  # in order to be able to count the notifications that are not hidden, we need to keep the original array + a computed one
+  filteredSourceNotifications: Ember.computed 'unfilteredSourceNotifications', 'unfilteredSourceNotifications.@each.status', ->
+    @get('unfilteredSourceNotifications')?.filter (notification) ->
+      if notification.get('status') is "hide" then return false
+      else return true
+  filteredTargetNotifications: Ember.computed 'unfilteredTargetNotifications', 'unfilteredTargetNotifications.@each.status', ->
+    @get('unfilteredTargetNotifications')?.filter (notification) ->
+      if notification.get('status') is "hide" then return false
+      else return true
+
+  # here we select which one should be used
+  sourceNotifications: Ember.computed 'unfilteredSourceNotifications', 'unfilteredSourceNotifications.@each.status', 'shouldFilterNotificationsOnStatus', ->
+    if @get('shouldFilterNotificationsOnStatus') then @get('filteredSourceNotifications')
+    else @get('unfilteredSourceNotifications')
+  targetNotifications: Ember.computed 'unfilteredTargetNotifications', 'unfilteredTargetNotifications.@each.status', 'shouldFilterNotificationsOnStatus', ->
+    if @get('shouldFilterNotificationsOnStatus') then @get('filteredTargetNotifications')
+    else @get('unfilteredTargetNotifications')
 
 `export default RefresherToolService`

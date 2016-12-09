@@ -19,7 +19,7 @@ SearchUtilsMixin = Ember.Mixin.create
   cursorPosition: undefined
 
   #Whether the search should close after adding one user
-  multiAdds: true
+  multiAdds: false
 
   #Store the previous key pressed
   previousKey: undefined
@@ -58,17 +58,23 @@ SearchUtilsMixin = Ember.Mixin.create
   actions:
     closeSearch: ->
       @finishCloseSearch()
-    keyPress: () ->
-      if(event.keyCode == 13 && not event.shiftKey)
-        event.preventDefault()
-        @handleEnter()
-      else
-        if [":", ";"].contains(event.key) and @get('previousKey') is "@"
+
+    keyPress: (value, event) ->
+      # if it's a transform key, we just let it fly away
+      unless event.shiftKey or event.ctrlKey or event.altKey or (event.keyCode is 225)
+        # if enter without shift, then we confirm
+        if(event.keyCode == 13)
           event.preventDefault()
-          if ":" is event.key then @set('multiAdds', true)
-          else if ";" is event.key then @set('multiAdds', false)
-          @beginSearch()
-      @set('previousKey', event.key)
+          @handleEnter()
+        else
+          # if @: then we need to show the user search
+          if [":", ";"].contains(event.key)
+            cursor = @$('textarea')[0].selectionStart
+            if value.charAt(cursor-1) is "@"
+              event.preventDefault()
+              if ":" is event.key then @set('multiAdds', false)
+              else if ";" is event.key then @set('multiAdds', true)
+              @beginSearch()
 
     addAssigned: (user) ->
       @finishAddAssigned(user)

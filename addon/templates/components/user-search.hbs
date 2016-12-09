@@ -1,9 +1,7 @@
-{{#modal-dialog renderInPlace=true}}
-  {{input type="text" id=(concat "userSearch" index) value=searchString key-press="keyPressSearch"}}
-  <button class="close" {{action "closeSearch"}}>Close</button>
-  <ul>
-    {{#each filteredUsers as |user index|}}
-      <li class="add-assigned {{concat "index-" index}}" {{action "addAssigned" user}}>{{user.name}}</li>
-    {{/each}}
-  </ul>
-{{/modal-dialog}}
+{{input type="text" id=(concat "userSearch" index) value=searchString key-down="keyPressSearch" escape-press="closeSearch"}}
+<button class="close" {{action "closeSearch"}}>Close</button>
+<ul>
+  {{#each filteredUsers as |user index|}}
+    <li class="add-assigned {{concat "index-" index}}" {{action "addAssigned" user}}>{{user.name}}</li>
+  {{/each}}
+</ul>

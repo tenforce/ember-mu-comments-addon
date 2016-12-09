@@ -1,0 +1,9 @@
+<td {{action "handleClick" assignment.notification}}>{{assignment.notification.comment.message}}</td>
+<td {{action "handleClick" assignment.notification}}>{{await assignment.notification.comment.about.defaultPrefLabel}}</td>
+<td {{action "handleClick" assignment.notification}}>{{assignment.notification.createdBy.name}}</td>
+<td {{action "handleClick" assignment.notification}}>{{assignment.notification.solved}}</td>
+{{#if (eq assignment.status "show")}}
+  <td {{action "toggleStatus" assignment}}>Hide</td>
+{{else}}
+  <td {{action "toggleStatus" assignment}}>Show</td>
+{{/if}}

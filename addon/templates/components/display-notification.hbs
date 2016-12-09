@@ -1,9 +1,9 @@
-<td>{{notification.createdBy.name}}</td>
-<td>{{notification.createdWhen}}</td>
-<td>{{notification.solved}}</td>
-<td>{{notification.solvedBy.name}}</td>
-<td>{{notification.solvedWhen}}</td>
-<td>{{notification.comment.message}}</td>
-<td>{{notification.status}}</td>
-<td>{{notification.assignedTo.name}}</td>
-<td></td>
+<td {{action "handleClick" notification}}>{{notification.comment.message}}</td>
+<td {{action "handleClick" notification}}>{{await notification.comment.about.defaultPrefLabel}}</td>
+<td {{action "handleClick" notification}}>{{await assignedTo}}</td>
+<td {{action "handleClick" notification}}>{{notification.solved}}</td>
+{{#if (eq notification.status "show")}}
+  <td {{action "toggleStatus" notification}}>Hide</td>
+{{else}}
+  <td {{action "toggleStatus" notification}}>Show</td>
+{{/if}}

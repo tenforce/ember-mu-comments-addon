@@ -34,10 +34,10 @@ Comment = DS.Model.extend
   author: DS.belongsTo('user', {inverse:null})
   creationDate: DS.attr('string')
   modificationDate: DS.attr('string')
-  notifications: DS.hasMany('comment-notification', {inverse:null})
+  notification: DS.belongsTo('comment-notification', {inverse:null})
 
   destroyRecord: () ->
-    @get('notifications').forEach (notification) ->
+    @get('notification').then (notification) ->
       notification.destroyRecord()
     @_super(arguments...)
 

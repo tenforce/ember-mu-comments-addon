@@ -7,19 +7,14 @@
 * `npm install ember-cli-coffeescript`
 * `npm install ember-mu-comments`
 
-## Setup
-Back-end : git@git.tenforce.com:mu-semtech/mu-comments.git
-If you provide it yourself, the front-end do not provide information about the Author, we used a cookie for that.
-```
 
 ## Basic usage
 ### How to display a list of comments
 ```javascript
-{{display-comments about=aboutId}}
+{{display-comments about=about user=user isDisplayed=isDisplayed loadingPlaceholder=loadingPlaceholder}}
+and
+{{display-notifications user=user loadingPlaceholder=loadingPlaceholder handleClick="handleClick"}}
 ```
-### Controller :  
-The controller only needs to provide the "About", which is the target of the comment. 
-If it changes, as long as the controller sees the change, the addon should notice the modification and refresh the list.
 
-###Note :
-The list is not refreshed unless you switch from one "About" to another. This is to prevent too many calls as we do not really need a chatbox.
+"handleClick" needs to be handled by the platform, it is triggered every time a user clicks on a cell of the notifications table (except the 
+one to switch status).

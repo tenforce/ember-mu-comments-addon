@@ -3,6 +3,9 @@
 
 UserSearchComponent = Ember.Component.extend(
   layout:layout
+  classNames: ['user-search']
+
+  # only show the users that can be added, using the search string and the already assigned users
   filteredUsers: Ember.computed 'availableUsers', 'searchString', 'assignedUsers.length', ->
     users = []
     searchString = @get('searchString')
@@ -29,7 +32,7 @@ UserSearchComponent = Ember.Component.extend(
       @finishAddAssigned(user)
     closeSearch: ->
       @finishCloseSearch()
-    keyPressSearch: ->
+    keyPressSearch: (value, event) ->
       if(event.keyCode == 13 && not event.shiftKey)
         event.preventDefault()
         @endSearch()
