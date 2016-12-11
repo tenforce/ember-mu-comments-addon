@@ -25,7 +25,8 @@ DisplayCommentsComponent = Ember.Component.extend(
   loadingPlaceholder: Ember.computed ->
     return Ember.String.htmlSafe("<i class=\"fa fa-spinner fa-pulse\"></i>")
   tooltipTitle: "view comments"
-
+  targetAttachment:'bottom middle'
+  attachment:'top right'
   init: ->
     @get('intl').setLocale('en-us')
     this._super()

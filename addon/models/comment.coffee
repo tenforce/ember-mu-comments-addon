@@ -38,7 +38,7 @@ Comment = DS.Model.extend
 
   destroyRecord: () ->
     @get('notification').then (notification) ->
-      notification.destroyRecord()
+      notification?.destroyRecord()
     @_super(arguments...)
 
 

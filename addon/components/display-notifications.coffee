@@ -15,6 +15,8 @@ DisplayNotificationsComponent = Ember.Component.extend(
   loadingPlaceholder: Ember.computed ->
     return Ember.String.htmlSafe("<i class=\"fa fa-spinner fa-pulse\"></i>")
   tooltipTitle: "view notifications"
+  targetAttachment:'bottom middle'
+  attachment:'top middle'
 
   isDisplayed: false
   buttonTabIndex: "-1"

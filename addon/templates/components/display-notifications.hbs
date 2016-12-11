@@ -6,7 +6,7 @@
   </button>
   {{#if isDisplayed}}
     {{#tether-dialog close='toggleDisplay' container-class="notifications-modal" hasOverlay=false clickOutsideToClose=false target=(concat '#' idbutton)
-    targetAttachment='bottom middle' attachment='top middle'}}
+    targetAttachment=targetAttachment attachment=attachment}}
       <div class="close" {{action 'toggleDisplay'}}>x</div>
       <div class="selector">
         <ul class="menu">
