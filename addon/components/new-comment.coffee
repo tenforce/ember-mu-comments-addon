@@ -4,7 +4,6 @@
 
 NewComment = Ember.Component.extend SearchUtils,
   layout: layout
-  classNames:['new-comment']
   store: Ember.inject.service()
   enums: Ember.inject.service("enums-utils")
   language: Ember.computed -> @get('user.language') || "en"

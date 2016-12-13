@@ -3,7 +3,6 @@
 
 ListComment = Ember.Component.extend
   layout: layout
-  classNames:['list-comments']
 
   sortProperties: ['creationDate:desc']
   sortedComments: Ember.computed.sort('comments', 'sortProperties')
