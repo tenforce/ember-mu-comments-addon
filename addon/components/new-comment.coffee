@@ -30,7 +30,7 @@ NewComment = Ember.Component.extend SearchUtils,
     if (save) then @get('notification.save')
 
   textAreaPlaceholder: "Please enter your comment"
-  addButtonLabel: "Add comment"
+  addButtonLabel: "Comment"
   comment: undefined
   showModal: true
 
