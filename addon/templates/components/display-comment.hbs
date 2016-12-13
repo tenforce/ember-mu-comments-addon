@@ -19,9 +19,7 @@
 
   <div class="message">
     {{textarea value=comment.message key-down="keyPress" disabled=shouldDisableTextArea}}
-    <div class="status-symbol">
-      <label for="status"></label> {{input type="checkbox" checked=isSolved disabled=disableCheckbox click=(action "changeStatus")}}
-    </div>
+    <div class="status-symbol"></div>
     {{#if editing}}
       <ul class="assigned-users">
         {{#each assignedUsers as |user|}}

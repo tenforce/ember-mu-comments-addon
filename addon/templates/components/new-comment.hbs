@@ -12,12 +12,8 @@
           {{/each}}
         </ul>
       </div>
-      {{!-- {{#modal-dialog container-class="user-search-modal" renderInPlace=true}}
-      --}} {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds) addAssigned="addAssigned" closeSearch="closeSearch" }}
-        {{!-- {{/modal-dialog}}
-        --}} {{/if}}
-
+      {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds) addAssigned="addAssigned" closeSearch="closeSearch" }}
+    {{/if}}
   </div>
-
 </div>
-<button type="button" class="btn btn--post-comment" name="submitNewComment" id="submitNewComment" {{action "createComment"}}>{{addButtonLabel}}</button>
+<button type="button" class="btn btn--post-comment" name="submitNewComment" {{action "createComment"}}>{{addButtonLabel}}</button>
