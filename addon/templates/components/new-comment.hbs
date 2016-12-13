@@ -1,17 +1,23 @@
-<div class="content">
-  {{textarea value=comment.message id="newCommentContent" name="newCommentContent" disabled=disableComment placeholder=textAreaPlaceholder
-  key-down="keyPress"}}
-  <ul class="assigned-users">
-    {{#each assignedUsers as |user|}}
-      <li><span>{{user.name}}</span> <button class="delete" {{action "removeAssigned" user}}>x</button></li>
-    {{/each}}
-  </ul>
-  {{#if searchingForUser}}
-    {{#modal-dialog container-class="user-search-modal" renderInPlace=true}}
-      {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds) addAssigned="addAssigned" closeSearch="closeSearch"}}
-    {{/modal-dialog}}
-  {{/if}}
+<div class="new-comment">
+  <div class="message">
+    {{textarea value=comment.message id="newCommentContent" name="newCommentContent" disabled=disableComment placeholder=textAreaPlaceholder key-down="keyPress"}}
+  </div>
+  <div class="notify">
+    {{#if searchingForUser}}
+      <label>Notify:</label>
+      <div class="notified-users">
+        <ul>
+          {{#each assignedUsers as |user|}}
+            <li><span>{{user.name}}</span> <button class="remove" {{action "removeAssigned" user}}>x</button></li>
+          {{/each}}
+        </ul>
+      </div>
+      {{!-- {{#modal-dialog container-class="user-search-modal" renderInPlace=true}}
+      --}} {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds) addAssigned="addAssigned" closeSearch="closeSearch" }}
+        {{!-- {{/modal-dialog}}
+        --}} {{/if}}
+
+  </div>
+
 </div>
-<div class="newButton">
-  <button type="button" name="submitNewComment" id="submitNewComment" {{action "createComment"}}>{{addButtonLabel}}</button>
-</div>
+<button type="button" class="btn btn--post-comment" name="submitNewComment" id="submitNewComment" {{action "createComment"}}>{{addButtonLabel}}</button>
