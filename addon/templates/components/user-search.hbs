@@ -1,5 +1,4 @@
 {{input type="text" id=(concat "userSearch" index) value=searchString key-down="keyPressSearch" escape-press="closeSearch" placeholder='Search for a person'}}
-{{!-- <button class="close" {{action "closeSearch"}}>Close</button> --}}
 <div class="suggested-users">
   <ul>
     {{#each filteredUsers as |user index|}}
