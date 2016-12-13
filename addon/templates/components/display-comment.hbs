@@ -1,38 +1,48 @@
-<div class="top">
-  <span class="author">{{await authorName}}</span>
-  <div class="buttons">
-    {{#if loading}}
-      {{loadingPlaceholder}}
-    {{else}}
-      <button type="button" name="modifyComment" class="edit" disabled={{disable}} {{action "toggleEditing"}}>edit</button>
-      <button type="button" name="deleteComment" class="remove" disabled={{disable}} {{action "deleteComment" comment}}>delete</button>
+<div class="comment {{comment.status}}">
+  <div class="header">
+    <div class="author">{{await authorName}}</div>
+    <div class="actions">
+      {{#if loading}}
+        {{loadingPlaceholder}}
+      {{else}}
+        <ul>
+          <li class="edit">
+            <button type="button" name="modifyComment" disabled= {{disable}} {{action "toggleEditing"}}>edit</button>
+          </li>
+          <li class="delete">
+            <button type="button" name="deleteComment" disabled= {{disable}} {{action "deleteComment" comment}}>delete</button>
+          </li>
+        </ul>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="message">
+    {{textarea value=comment.message key-down="keyPress" disabled=shouldDisableTextArea}}
+    <div class="status-symbol">
+      <label for="status"></label> {{input type="checkbox" checked=isSolved disabled=disableCheckbox click=(action "changeStatus")}}
+    </div>
+    {{#if editing}}
+      <ul class="assigned-users">
+        {{#each assignedUsers as |user|}}
+          <li><span>{{user.name}}</span> <button class="delete" {{action "removeAssigned" user}}>x</button></li>
+        {{/each}}
+      </ul>
+      {{#if searchingForUser}}
+        {{#modal-dialog container-class="user-search-modal" renderInPlace=true}}
+          {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=multiAdds addAssigned="addAssigned" closeSearch="closeSearch"}}
+        {{/modal-dialog}}
+      {{/if}}
     {{/if}}
   </div>
-</div>
 
-<div class="middle">
-  <div class="status {{comment.status}}">
-    <label for="status"></label>
-    {{input type="checkbox" checked=isSolved disabled=disableCheckbox click=(action "changeStatus")}}
+  <div class="footer">
+    <div class="post-time">
+      {{#if comment.modificationDate}}
+        Modified {{format-relative comment.modificationDate type="numeric" interval=1000}}
+      {{else}}
+        Created {{format-relative comment.creationDate type="numeric" interval=1000}}
+      {{/if}}
+    </div>
   </div>
-  {{textarea value=comment.message key-down="keyPress" disabled=shouldDisableTextArea}}
-  {{#if editing}}
-    <ul class="assigned-users">
-      {{#each assignedUsers as |user|}}
-        <li><span>{{user.name}}</span> <button class="delete" {{action "removeAssigned" user}}>x</button></li>
-      {{/each}}
-    </ul>
-    {{#if searchingForUser}}
-      {{#modal-dialog container-class="user-search-modal" renderInPlace=true}}
-        {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=multiAdds addAssigned="addAssigned" closeSearch="closeSearch"}}
-      {{/modal-dialog}}
-    {{/if}}
-  {{/if}}
-</div>
-
-<div class="bottom">
-  <span class="creation-date">Created {{format-relative comment.creationDate type="numeric" interval=1000}}</span>
-  {{#if comment.modificationDate}}
-    <span class="modification-date">Modified {{format-relative comment.modificationDate type="numeric" interval=1000}}</span>
-  {{/if}}
 </div>
