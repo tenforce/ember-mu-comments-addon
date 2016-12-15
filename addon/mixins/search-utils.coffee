@@ -30,7 +30,7 @@ SearchUtilsMixin = Ember.Mixin.create
   beginSearch: ->
     @set('cursorPosition', @$('textarea')[0].selectionStart || 0)
     @set('searchingForUser', true)
-    @set('disableComment', true)
+    # @set('disableComment', true)
     Ember.run.next =>
       @$("#userSearch#{@get('index')}")[0]?.focus()
 
@@ -42,7 +42,7 @@ SearchUtilsMixin = Ember.Mixin.create
   finishCloseSearch: ->
     @set('searchString', '')
     @set('searchingForUser', false)
-    @set('disableComment', false)
+    # @set('disableComment', false)
     Ember.run.next =>
       @$('textarea')[0]?.focus()
 
