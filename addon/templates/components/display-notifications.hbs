@@ -1,24 +1,20 @@
 {{#if loading}}
   {{loadingPlaceholder}}
 {{else}}
-  <button type="button" name="showNotifications" id={{idbutton}} {{action "toggleDisplay"}} title={{tooltipTitle}} tabindex={{buttonTabIndex}}>
+  <button type="button" name="showNotifications" id= {{idbutton}} {{action "toggleDisplay"}} title= {{tooltipTitle}} tabindex= {{buttonTabIndex}}>
     <span>{{refresher.combinedLength}}</span>
   </button>
   {{#if isDisplayed}}
-    {{#tether-dialog close='toggleDisplay' container-class="notifications-modal" hasOverlay=false clickOutsideToClose=false target=(concat '#' idbutton)
-    targetAttachment=targetAttachment attachment=attachment}}
-      <div class="close" {{action 'toggleDisplay'}}>x</div>
-      <div class="selector">
-        <ul class="menu">
-          <li selected="{{if (eq display "source") true false}}" {{action "toDisplay" "source"}}>
-            <span class="option">Source notifications</span><span class="count">{{refresher.filteredSourceNotifications.length}}</span></li>
-          <li selected="{{if (eq display "target") true false}}" {{action "toDisplay" "target"}}>
-            <span class="option">Target notifications</span><span class="count">{{refresher.filteredTargetNotifications.length}}</span></li>
-        </ul>
-      </div>
+    {{#tether-dialog close='toggleDisplay' container-class="comments-modal" hasOverlay=false clickOutsideToClose=true target=(concat '#' idbutton) targetAttachment=targetAttachment attachment=attachment}}
+
+      <ul class="nav">
+        <li selected="{{if (eq display "source") true false}}" class="{{if (eq display "source") 'selected'}}" {{action "toDisplay" "source"}}>Inbox</li>
+        <li selected="{{if (eq display "target") true false}}" class="{{if (eq display "target") 'selected'}}" {{action "toDisplay" "target"}}>Sent</li>
+      </ul>
+
       {{#if (eq display "source")}}
         {{list-notifications notifications=sourceNotifications handleClick="handleClick"}}
-      {{else if (eq display "target")}}
+        {{else if (eq display "target")}}
         {{list-assignments assignments=targetNotifications handleClick="handleClick"}}
       {{/if}}
     {{/tether-dialog}}

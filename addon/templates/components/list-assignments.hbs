@@ -1,20 +1,17 @@
-<div class="options">
-  <i class="fa {{if (eq showHidden true) 'fa-toggle-on' 'fa-toggle-off'}}" {{action 'toggleShowHidden'}}></i>
-  <span>{{#if (eq showHidden true)}}Hidden notifications are shown{{else}}Hidden notifications are not shown{{/if}}</span>
-</div>
-{{#if emptyAssignments}}
-  No notifications to display
-{{else}}
-  <table>
-    <tr>
-      <th>Comment</th>
-      <th>Concept</th>
-      <th>From</th>
-      <th>Solved</th>
-      <th>Hide / Show</th>
-    </tr>
+<div class="posted-comments posted-comments--sent">
+
+  {{#if emptyAssignments}}
+    No notifications to display
+  {{else}}
     {{#each assignments as |assignment index|}}
       {{display-assignment assignment=assignment index=index handleClick="handleClick"}}
     {{/each}}
-  </table>
-{{/if}}
+
+    <div class="toggle-hidden-comments">
+      <i class="fa {{if (eq showHidden true) 'fa-toggle-on' 'fa-toggle-off'}}" {{action 'toggleShowHidden'}}></i>
+      <h2>
+      <span>Hidden</span>
+    </h2>
+    </div>
+  {{/if}}
+</div>

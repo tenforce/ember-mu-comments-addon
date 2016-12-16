@@ -1,9 +1,14 @@
-<td {{action "handleClick" notification}}>{{notification.comment.message}}</td>
-<td {{action "handleClick" notification}}>{{await notification.comment.about.defaultPrefLabel}}</td>
-<td {{action "handleClick" notification}}>{{await assignedTo}}</td>
-<td {{action "handleClick" notification}}>{{notification.solved}}</td>
-{{#if (eq notification.status "show")}}
-  <td {{action "toggleStatus" notification}}>Hide</td>
-{{else}}
-  <td {{action "toggleStatus" notification}}>Show</td>
-{{/if}}
+<div class="comment">
+  <div class="header">
+    <div class="author">
+      {{notification.createdBy.name}} on <span>'{{await notification.comment.about.defaultPrefLabel}}'</span>
+    </div>
+  </div>
+  <div class="message">
+    <div class="message-bubble">{{notification.comment.message}}</div>
+    <div class="status-symbol"></div>
+  </div>
+  <div class="footer">
+    <div class="post-time">{{notification.createdWhen}}</div>
+  </div>
+</div>

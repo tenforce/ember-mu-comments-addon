@@ -1,9 +1,13 @@
-<td {{action "handleClick" assignment.notification}}>{{assignment.notification.comment.message}}</td>
-<td {{action "handleClick" assignment.notification}}>{{await assignment.notification.comment.about.defaultPrefLabel}}</td>
-<td {{action "handleClick" assignment.notification}}>{{assignment.notification.createdBy.name}}</td>
-<td {{action "handleClick" assignment.notification}}>{{assignment.notification.solved}}</td>
-{{#if (eq assignment.status "show")}}
-  <td {{action "toggleStatus" assignment}}>Hide</td>
-{{else}}
-  <td {{action "toggleStatus" assignment}}>Show</td>
-{{/if}}
+<div class="comment">
+  <div class="header">
+    <div class="author">
+      {{assignment.notification.createdBy.name}} on <span>'{{await assignment.notification.comment.about.defaultPrefLabel}}'</span>
+    </div>
+  </div>
+  <div class="message">
+    <div class="message-bubble">{{assignment.notification.comment.message}}</div>
+  </div>
+  <div class="footer">
+    <div class="post-time">{{assignment.notification.createdWhen}}</div>
+  </div>
+</div>
