@@ -4,7 +4,6 @@
 DisplayAssignmentComponent = Ember.Component.extend(
   layout: layout
   classNames:['display-notification']
-  tagName: 'tr'
   enums: Ember.inject.service("enums-utils")
   classNameBindings: ['assignment.notification.solved:solved:unsolved', 'assignment.status']
 
