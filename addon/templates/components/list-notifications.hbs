@@ -10,8 +10,7 @@
     </div>
   {{/if}}
 
-  <div class="toggle-hidden-comments">
-    <i class="fa {{if (eq showHidden true) 'fa-toggle-on' 'fa-toggle-off'}}" {{action 'toggleShowHidden'}}></i>
+  <div class="toggle-hidden-comments"  {{action 'toggleShowHidden'}}>
     <h2>
       <span>Hidden</span>
     </h2>
