@@ -5,7 +5,7 @@
     <span>{{refresher.combinedLength}}</span>
   </button>
   {{#if isDisplayed}}
-    {{#tether-dialog close='toggleDisplay' container-class="comments-modal" hasOverlay=false clickOutsideToClose=true target=(concat '#' idbutton) targetAttachment=targetAttachment attachment=attachment}}
+    {{#tether-dialog close='toggleDisplay' container-class="comments-modal" hasOverlay=true target=(concat '#' idbutton) targetAttachment=targetAttachment attachment=attachment}}
 
       <ul class="nav">
         <li selected="{{if (eq display "source") true false}}" class="{{if (eq display "source") 'selected'}}" {{action "toDisplay" "source"}}>Inbox</li>

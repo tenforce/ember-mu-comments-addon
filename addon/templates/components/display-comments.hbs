@@ -5,7 +5,7 @@
     <span>{{comments.length}}</span>
   </button>
   {{#if isDisplayed}}
-    {{#tether-dialog close='toggleDisplay' container-class="comments-modal" hasOverlay=false clickOutsideToClose=true target=(concat '#' idbutton)
+    {{#tether-dialog close='toggleDisplay' container-class="comments-modal" hasOverlay=true target=(concat '#' idbutton)
     targetAttachment=targetAttachment attachment=attachment}}
       {{list-comments comments=comments user=user users=users about=about refresh="refresh"}}
     {{/tether-dialog}}
