@@ -7,7 +7,7 @@
     <div class="notified-users">
       <ul>
         {{#each assignedUsers as |user|}}
-          <li><span>{{user.name}}</span> <button class="remove" {{action "removeAssigned" user}}>x</button></li>
+          <li><span>{{user.name}}</span> <button class="remove" {{action "removeAssigned" user}} tabindex="-1">x</button></li>
         {{/each}}
       </ul>
     </div>
