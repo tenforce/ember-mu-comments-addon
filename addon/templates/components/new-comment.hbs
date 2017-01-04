@@ -1,19 +1,17 @@
-<div class="new-comment">
-  <div class="message">
-    {{textarea value=comment.message id="newCommentContent" name="newCommentContent" placeholder=textAreaPlaceholder key-down="keyPress"}}
-  </div>
-  <div class="notify">
-    {{#if searchingForUser}}
-      <label>Notify:</label>
-      <div class="notified-users">
-        <ul>
-          {{#each assignedUsers as |user|}}
-            <li><span>{{user.name}}</span> <button class="remove" {{action "removeAssigned" user}}>x</button></li>
-          {{/each}}
-        </ul>
-      </div>
-      {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds) addAssigned="addAssigned" closeSearch="closeSearch" }}
-    {{/if}}
-  </div>
+<div class="message">
+  {{textarea value=comment.message disabled=loading id="newCommentContent" name="newCommentContent" placeholder=textAreaPlaceholder key-down="keyPress"}}
 </div>
-<button type="button" class="btn btn--post-comment" name="submitNewComment" {{action "createComment"}}>{{addButtonLabel}}</button>
+<div class="notify">
+  <label>Notify:</label>
+  {{#unless emptyAssignedUsers}}
+    <div class="notified-users">
+      <ul>
+        {{#each assignedUsers as |user|}}
+          <li><span>{{user.name}}</span> <button class="remove" {{action "removeAssigned" user}}>x</button></li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/unless}}
+  {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds) addAssigned="addAssigned" closeSearch="closeSearch" }}
+</div>
+<button type="button" disabled={{loading}} class="btn btn--post-comment" name="submitNewComment" {{action "createComment"}}>{{addButtonLabel}}</button>

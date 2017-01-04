@@ -3,7 +3,9 @@
 
 UserSearchComponent = Ember.Component.extend(
   layout:layout
-  classNames: ['user-search']
+  tagName: ''
+
+  maxUsers: 3
 
   # only show the users that can be added, using the search string and the already assigned users
   filteredUsers: Ember.computed 'availableUsers', 'searchString', 'assignedUsers.length', ->
@@ -15,7 +17,7 @@ UserSearchComponent = Ember.Component.extend(
         if searchString
           if(((user.get('name').toLowerCase()).indexOf((searchString).toLowerCase())) >= 0) then users.push(user)
         else users.push(user)
-    users
+    users.slice(0, @get('maxUsers'))
   searchString: ""
 
   endSearch: ->
@@ -25,7 +27,11 @@ UserSearchComponent = Ember.Component.extend(
   finishAddAssigned: (user) ->
     @sendAction('addAssigned', user)
     if @get('closeAfterAdding') then @finishCloseSearch()
+    else @clearField()
+  clearField: ->
+    @set('searchString', '')
   finishCloseSearch: ->
+    @clearField()
     @sendAction('closeSearch')
   actions:
     addAssigned: (user) ->

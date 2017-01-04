@@ -19,7 +19,7 @@ SearchUtilsMixin = Ember.Mixin.create
   cursorPosition: undefined
 
   #Whether the search should close after adding one user
-  multiAdds: false
+  multiAdds: true
 
   #Store the previous key pressed
   previousKey: undefined
@@ -42,15 +42,17 @@ SearchUtilsMixin = Ember.Mixin.create
   finishCloseSearch: ->
     @set('searchString', '')
     @set('searchingForUser', false)
-    # @set('disableComment', false)
+    cursPos = @get('cursorPosition')
     Ember.run.next =>
       @$('textarea')[0]?.focus()
+      if cursPos then @$('textarea')[0]?.setSelectionRange(cursPos, cursPos)
 
   finishAddAssigned: (user) ->
     unless @get('assignedUsers').contains(user) then @get('assignedUsers').pushObject(user)
     cursPos = @get('cursorPosition')
-    newstring = "#{@get('comment.message').substr(0, cursPos)}\"#{(user.get('name') || "anonymous")}\"#{@get('comment.message').substr(cursPos)}"
-    @set('comment.message', newstring)
+    Ember.run.next =>
+      @$('textarea')[0]?.focus()
+      if cursPos then @$('textarea')[0]?.setSelectionRange(cursPos, cursPos)
 
   finishRemoveAssigned: (user) ->
     @get('assignedUsers').removeObject(user)
@@ -66,15 +68,6 @@ SearchUtilsMixin = Ember.Mixin.create
         if(event.keyCode == 13)
           event.preventDefault()
           @handleEnter()
-        else
-          # if @: then we need to show the user search
-          if [":", ";"].contains(event.key)
-            cursor = @$('textarea')[0].selectionStart
-            if value.charAt(cursor-1) is "@"
-              event.preventDefault()
-              if ":" is event.key then @set('multiAdds', false)
-              else if ";" is event.key then @set('multiAdds', true)
-              @beginSearch()
 
     addAssigned: (user) ->
       @finishAddAssigned(user)

@@ -4,6 +4,7 @@
 
 DisplayComment = Ember.Component.extend SearchUtils,
   layout: layout
+  classNames: ['comment']
   classNameBindings: ['comment.status', 'editing:editMode']
   enums: Ember.inject.service("enums-utils")
   store: Ember.inject.service()

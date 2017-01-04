@@ -4,6 +4,7 @@
 
 NewComment = Ember.Component.extend SearchUtils,
   layout: layout
+  classNames: ['new-comment']
   store: Ember.inject.service()
   enums: Ember.inject.service("enums-utils")
   language: Ember.computed -> @get('user.language') || "en"
@@ -43,6 +44,7 @@ NewComment = Ember.Component.extend SearchUtils,
 
   # very long function to just create a comment and notification and assignments and stuff
   creatingComment:  ->
+    @set('loading', true)
     comment = @get('comment')
     if comment?.get('message.length') < 1 then return;
     date = new Date().toISOString()
@@ -74,6 +76,15 @@ NewComment = Ember.Component.extend SearchUtils,
       else
         @newComment()
         @sendAction('refresh')
+      Ember.run.next =>
+        unless @get('isDestroyed')
+          @set('loading', false)
+          Ember.run.next =>
+            @$('textarea')?[0]?.focus()
 
+
+  actions:
+    createComment: ->
+      @creatingComment()
 
 `export default NewComment;`
