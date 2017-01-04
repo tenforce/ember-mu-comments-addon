@@ -7,10 +7,10 @@
       {{else}}
         <ul>
           <li class="edit">
-            <button type="button" name="modifyComment" disabled= {{disable}} {{action "toggleEditing"}}></button>
+            <button type="button" name="modifyComment" disabled={{disable}} {{action "toggleEditing"}}></button>
           </li>
           <li class="delete">
-            <button type="button" name="deleteComment" disabled= {{disable}} {{action "deleteComment" comment}}></button>
+            <button type="button" name="deleteComment" disabled={{disable}} {{action "deleteComment" comment}}></button>
           </li>
         </ul>
       {{/if}}
@@ -35,12 +35,9 @@
   </div>
 
   <div class="footer">
-    <div class="post-time">
-      {{#if comment.modificationDate}}
-        Modified {{format-relative comment.modificationDate type="numeric" interval=1000}}
-      {{else}}
-        Created {{format-relative comment.creationDate type="numeric" interval=1000}}
-      {{/if}}
-    </div>
+    <div class="post-time">Created {{format-relative comment.creationDate type="numeric" interval=1000}}</div>
+    {{#if comment.modificationDate}}
+      <div class="edit-time">Modified {{format-relative comment.modificationDate type="numeric" interval=1000}}</div>
+    {{/if}}
   </div>
 </div>

@@ -33,14 +33,19 @@ NewComment = Ember.Component.extend SearchUtils,
   comment: undefined
   showModal: true
 
+  emptyAssignedUsers: Ember.computed 'assignedUsers.length', ->
+    if @get('assignedUsers.length') > 0 then return false
+    else return true
+
 
   handleEnter: ->
     @creatingComment()
 
   # very long function to just create a comment and notification and assignments and stuff
   creatingComment:  ->
-    date = new Date().toISOString()
     comment = @get('comment')
+    if comment?.get('message.length') < 1 then return;
+    date = new Date().toISOString()
     unless comment.get('language') then comment.set('language', @get('language'))
     comment.set('status', @get('enums.status.unsolved'))
     comment.set('creationDate', date)
