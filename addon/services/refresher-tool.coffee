@@ -85,12 +85,5 @@ RefresherToolService = Ember.Service.extend
       if notification.get('status') is "hide" then return false
       else return true
 
-  # here we select which one should be used
-  sourceNotifications: Ember.computed 'unfilteredSourceNotifications', 'unfilteredSourceNotifications.@each.status', 'shouldFilterNotificationsOnStatus', ->
-    if @get('shouldFilterNotificationsOnStatus') then @get('filteredSourceNotifications')
-    else @get('unfilteredSourceNotifications')
-  targetNotifications: Ember.computed 'unfilteredTargetNotifications', 'unfilteredTargetNotifications.@each.status', 'shouldFilterNotificationsOnStatus', ->
-    if @get('shouldFilterNotificationsOnStatus') then @get('filteredTargetNotifications')
-    else @get('unfilteredTargetNotifications')
 
 `export default RefresherToolService`

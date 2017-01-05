@@ -24,7 +24,7 @@ DisplayCommentsComponent = Ember.Component.extend(
   # htmlsafe is needed to display some html in hbs from a variable
   loadingPlaceholder: Ember.computed ->
     return Ember.String.htmlSafe("<i class=\"fa fa-spinner fa-pulse\"></i>")
-  tooltipTitle: "view comments"
+  tooltipTitle: "View comments"
   targetAttachment:'bottom middle'
   attachment:'top right'
   init: ->

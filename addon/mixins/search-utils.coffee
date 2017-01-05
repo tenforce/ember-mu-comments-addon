@@ -49,10 +49,6 @@ SearchUtilsMixin = Ember.Mixin.create
 
   finishAddAssigned: (user) ->
     unless @get('assignedUsers').contains(user) then @get('assignedUsers').pushObject(user)
-    cursPos = @get('cursorPosition')
-    Ember.run.next =>
-      @$('textarea')[0]?.focus()
-      if cursPos then @$('textarea')[0]?.setSelectionRange(cursPos, cursPos)
 
   finishRemoveAssigned: (user) ->
     @get('assignedUsers').removeObject(user)

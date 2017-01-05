@@ -8,8 +8,10 @@
     {{#tether-dialog close='toggleDisplay' container-class="comments-modal" hasOverlay=true target=(concat '#' idbutton) targetAttachment=targetAttachment attachment=attachment}}
 
       <ul class="nav">
-        <li selected="{{if (eq display "source") true false}}" class="{{if (eq display "source") 'selected'}}" {{action "toDisplay" "source"}}>Inbox</li>
-        <li selected="{{if (eq display "target") true false}}" class="{{if (eq display "target") 'selected'}}" {{action "toDisplay" "target"}}>Sent</li>
+        <li selected="{{if (eq display "target") true false}}" class="{{if (eq display "target") 'selected'}}" {{action "toDisplay"
+        "target"}}>Inbox ({{filteredTargetNotifications.length}})</li>
+        <li selected="{{if (eq display "source") true false}}" class="{{if (eq display "source") 'selected'}}" {{action "toDisplay"
+        "source"}}>Sent ({{filteredSourceNotifications.length}})</li>
       </ul>
 
       {{#if (eq display "source")}}

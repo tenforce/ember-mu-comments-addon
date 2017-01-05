@@ -7,11 +7,13 @@
     <div class="notified-users">
       <ul>
         {{#each assignedUsers as |user|}}
-          <li><span>{{user.name}}</span> <button class="remove" {{action "removeAssigned" user}} tabindex="-1">x</button></li>
+          <li {{action "removeAssigned" user}}>
+            <button class="remove" tabindex="-1">[-]</button> <span>{{user.name}}</span>
+          </li>
         {{/each}}
       </ul>
     </div>
   {{/unless}}
   {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds) addAssigned="addAssigned" closeSearch="closeSearch" }}
 </div>
-<button type="button" disabled={{loading}} class="btn btn--post-comment" name="submitNewComment" {{action "createComment"}}>{{addButtonLabel}}</button>
+<button type="button" class="btn btn--post-comment" disabled={{loading}} name="submitNewComment" {{action "createComment"}}>{{addButtonLabel}}</button>

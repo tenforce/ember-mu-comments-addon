@@ -2,7 +2,9 @@
 <div class="suggested-users">
   <ul>
     {{#each filteredUsers as |user index|}}
-      <li class="add-assigned {{concat "index-" index}}" {{action "addAssigned" user}}>{{user.name}}</li>
+      <li class="add-assigned {{concat "index-" index}}" {{action "addAssigned" user}}>
+        <button tabindex="-1" class="add">[+]</button> <span>{{user.name}}</span>
+      </li>
     {{/each}}
   </ul>
 </div>

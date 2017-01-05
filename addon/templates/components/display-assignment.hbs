@@ -1,13 +1,12 @@
-<div class="comment">
-  <div class="header">
-    <div class="author">
-      {{assignment.notification.createdBy.name}} on <span>'{{await assignment.notification.comment.about.defaultPrefLabel}}'</span>
-    </div>
+<div class="header" {{action "handleClick" assignment.notification}}>
+  <div class="author">
+    {{assignment.notification.createdBy.name}} on <span>'{{await assignment.notification.comment.about.defaultPrefLabel}}'</span>
   </div>
-  <div class="message">
-    <div class="message-bubble">{{assignment.notification.comment.message}}</div>
-  </div>
-  <div class="footer">
-    <div class="post-time">{{assignment.notification.createdWhen}}</div>
-  </div>
+</div>
+<div class="message {{assignment.status}}">
+  <div class="message-bubble" {{action "handleClick" assignment.notification}}>{{assignment.notification.comment.message}}</div>
+  <div class="status-symbol {{assignment.status}}" {{action "toggleStatus" assignment}}></div>
+</div>
+<div class="footer" {{action "handleClick" assignment.notification}}>
+  <div class="post-time">Notification created {{custom-format-date assignment.notification.createdWhen format=dateFormat.format}}</div>
 </div>

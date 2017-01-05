@@ -1,16 +1,26 @@
-<div class="posted-comments posted-comments--sent">
-
-  {{#if emptyAssignments}}
-    No notifications to display
-  {{else}}
-    {{#each assignments as |assignment index|}}
+{{#if emptyShownAssignments}}
+  <span>No notifications to display</span>
+{{else}}
+  <div class="visible-comments">
+    {{#each shownAssignments as |assignment index|}}
       {{display-assignment assignment=assignment index=index handleClick="handleClick"}}
     {{/each}}
+  </div>
+{{/if}}
 
-    <div class="toggle-hidden-comments" {{action 'toggleShowHidden'}}>
-      <h2>
-      <span>Hidden</span>
-    </h2>
+<div class="toggle-hidden-comments {{if showHidden "show" "hide"}}"  {{action 'toggleShowHidden'}}>
+  <h2>
+    <span title={{tooltipShowHidden}}>Hidden</span>
+  </h2>
+</div>
+{{#if showHidden}}
+  {{#if emptyHiddenAssignments}}
+    <span>No hidden notifications to display</span>
+  {{else}}
+    <div class="hidden-comments">
+      {{#each hiddenAssignments as |assignment index|}}
+        {{display-assignment assignment=assignment index=index handleClick="handleClick"}}
+      {{/each}}
     </div>
   {{/if}}
-</div>
+{{/if}}

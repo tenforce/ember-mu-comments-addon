@@ -3,9 +3,11 @@
 
 DisplayAssignmentComponent = Ember.Component.extend(
   layout: layout
-  classNames:['display-notification']
-  enums: Ember.inject.service("enums-utils")
+  classNames:['comment']
   classNameBindings: ['assignment.notification.solved:solved:unsolved', 'assignment.status']
+
+  enums: Ember.inject.service("enums-utils")
+  dateFormat: Ember.inject.service("date-format")
 
   actions:
     # when we click on some cells, we need to warn the platform to handle it

@@ -9,22 +9,24 @@ DisplayNotificationsComponent = Ember.Component.extend(
   enums: Ember.inject.service("enums-utils")
 
   idbutton: "showNotifications"
-  loading: Ember.computed 'refresher.sourceNotifications', 'refresher.targetNotifications', ->
-    if @get('refresher.sourceNotifications') and @get('refresher.targetNotifications') then return false
+  loading: Ember.computed 'sourceNotifications', 'targetNotifications', ->
+    if @get('sourceNotifications') and @get('targetNotifications') then return false
     else return true
   loadingPlaceholder: Ember.computed ->
     return Ember.String.htmlSafe("<i class=\"fa fa-spinner fa-pulse\"></i>")
-  tooltipTitle: "view notifications"
+  tooltipTitle: "View notifications"
   targetAttachment:'bottom middle'
   attachment:'top middle'
 
   isDisplayed: false
   buttonTabIndex: "-1"
 
-  display: "source"
+  display: "target"
 
-  sourceNotifications: Ember.computed.alias 'refresher.sourceNotifications'
-  targetNotifications: Ember.computed.alias 'refresher.targetNotifications'
+  sourceNotifications: Ember.computed.alias 'refresher.unfilteredSourceNotifications'
+  targetNotifications: Ember.computed.alias 'refresher.unfilteredTargetNotifications'
+  filteredSourceNotifications: Ember.computed.alias 'refresher.filteredSourceNotifications'
+  filteredTargetNotifications: Ember.computed.alias 'refresher.filteredTargetNotifications'
 
   userObserver: Ember.observer('user.id', () ->
     @reinitialize()

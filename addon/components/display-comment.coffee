@@ -7,6 +7,7 @@ DisplayComment = Ember.Component.extend SearchUtils,
   classNames: ['comment']
   classNameBindings: ['comment.status', 'editing:editMode']
   enums: Ember.inject.service("enums-utils")
+  dateFormat: Ember.inject.service("date-format")
   store: Ember.inject.service()
 
   author: Ember.computed.alias 'comment.author'

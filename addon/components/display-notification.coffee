@@ -3,8 +3,12 @@
 
 DisplayNotificationComponent = Ember.Component.extend(
   layout: layout
-  classNames:['display-notification']
+  classNames:['comment']
+  classNameBindings: ['notification.solved:solved:unsolved', 'notification.status']
+
   enums: Ember.inject.service("enums-utils")
+  dateFormat: Ember.inject.service("date-format")
+
   classNameBindings: ['notification.solved:solved:unsolved', 'notification.status']
 
   # fetching the names of assignedTo users
