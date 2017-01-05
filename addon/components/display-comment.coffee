@@ -31,7 +31,6 @@ DisplayComment = Ember.Component.extend SearchUtils,
   disableCheckbox: Ember.computed 'loading', 'comment.notification.assignments.@each.assignedTo', 'user.id', 'author.id', ->
     if @get('loading') then return true
     else
-      debugger
       if @get('user.id') is @get('author.id') then return false
       ret = true
       @get('comment.notification.assignments')?.forEach (assignment) =>
