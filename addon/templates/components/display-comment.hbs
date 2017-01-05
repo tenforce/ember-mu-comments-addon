@@ -3,13 +3,13 @@
   <div class="actions">
     {{#if loading}}
       {{loadingPlaceholder}}
-    {{else}}
+    {{else unless disable}}
       <ul>
-        <li class="edit {{if disabled "disabled" "enabled"}}">
-          <button type="button" class="edit {{if disabled "disabled" "enabled"}}" name="modifyComment" disabled={{disable}} {{action "toggleEditing"}}></button>
+        <li class="edit {{if disable "disabled" "enabled"}}">
+          <button type="button" class="edit {{if disable "disabled" "enabled"}}" name="modifyComment" disabled={{disable}} {{action "toggleEditing"}}></button>
         </li>
-        <li class="delete {{if disabled "disabled" "enabled"}}">
-          <button type="button" class="delete {{if disabled "disabled" "enabled"}}" name="deleteComment" disabled={{disable}} {{action "deleteComment" comment}}></button>
+        <li class="delete {{if disable "disabled" "enabled"}}">
+          <button type="button" class="delete {{if disable "disabled" "enabled"}}" name="deleteComment" disabled={{disable}} {{action "deleteComment" comment}}></button>
         </li>
       </ul>
     {{/if}}
@@ -18,7 +18,7 @@
 
 <div class="message {{comment.status}}">
   {{textarea value=comment.message key-down="keyPress" disabled=shouldDisableTextArea}}
-  <div class="status-symbol {{comment.status}}" {{action "changeStatus"}}></div>
+  <div class="status-symbol {{comment.status}} {{if disableCheckbox "disabled"}}" {{action "changeStatus"}}></div>
   {{#if editing}}
     <ul class="assigned-users">
       {{#each assignedUsers as |user|}}
