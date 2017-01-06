@@ -9,8 +9,6 @@ DisplayNotificationComponent = Ember.Component.extend(
   enums: Ember.inject.service("enums-utils")
   dateFormat: Ember.inject.service("date-format")
 
-  classNameBindings: ['notification.solved:solved:unsolved', 'notification.status']
-
   # fetching the names of assignedTo users
   assignedTo: Ember.computed 'notification.assignments', 'notification.assignments.@each.assignedTo', ->
     @get('notification.assignments').then (assignments) ->
