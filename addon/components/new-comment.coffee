@@ -71,8 +71,8 @@ NewComment = Ember.Component.extend SearchUtils,
             assignment.set('assignedTo', toNotify)
             assignment.save().then (persistedAssignment) =>
               persistedComment.get('notification.assignments').pushObject(persistedAssignment)
-        @newComment()
-        @sendAction('refresh')
+              @newComment()
+              @sendAction('refresh')
       else
         @newComment()
         @sendAction('refresh')
