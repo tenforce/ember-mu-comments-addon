@@ -8,7 +8,7 @@ ListAssignmentsComponent = Ember.Component.extend(
   enums: Ember.inject.service("enums-utils")
   refresher: Ember.inject.service("refresher-tool")
 
-  sortProperties: ['notification.creationDate:desc']
+  sortProperties: ['notification.createdWhen:desc']
   sortedAssignments: Ember.computed.sort('assignments', 'sortProperties')
 
   showHidden: Ember.computed.not 'refresher.shouldFilterNotificationsOnStatus'

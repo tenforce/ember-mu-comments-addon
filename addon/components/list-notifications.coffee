@@ -8,7 +8,7 @@ ListNotificationsComponent = Ember.Component.extend(
   enums: Ember.inject.service("enums-utils")
   refresher: Ember.inject.service("refresher-tool")
 
-  sortProperties: ['creationDate:desc']
+  sortProperties: ['createdWhen:desc']
   sortedNotifications: Ember.computed.sort('notifications', 'sortProperties')
 
   showHidden: Ember.computed.not 'refresher.shouldFilterNotificationsOnStatus'
