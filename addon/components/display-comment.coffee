@@ -108,6 +108,7 @@ DisplayComment = Ember.Component.extend SearchUtils,
       status = @get('comment.status')
       date = new Date().toISOString()
       @get('comment.notification').then (notification) =>
+        if notification
           # first we need to change change the solved status of the notification
           if status is @get('enums.status.solved')
             promises.push(notification.solve(user, date))
