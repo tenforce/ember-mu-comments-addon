@@ -10,6 +10,7 @@ DisplayComment = Ember.Component.extend SearchUtils,
   dateFormat: Ember.inject.service("date-format")
   store: Ember.inject.service()
 
+  searchString: ""
   author: Ember.computed.alias 'comment.author'
   authorName: Ember.computed 'author', ->
     @get('author').then (author) ->
@@ -91,7 +92,9 @@ DisplayComment = Ember.Component.extend SearchUtils,
     @set('comment.modificationDate', date)
     @get('comment').save().then =>
       @ensureAssigned(date).then =>
-        unless @get('isDestroyed') then @set 'loading', false
+        unless @get('isDestroyed')
+          @set 'searchString', ''
+          @set 'loading', false
     return @get('comment')
 
   finishChangeStatus: ->

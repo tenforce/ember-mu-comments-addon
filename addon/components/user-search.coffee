@@ -18,7 +18,7 @@ UserSearchComponent = Ember.Component.extend(
           if(((user.get('name').toLowerCase()).indexOf((searchString).toLowerCase())) >= 0) then users.push(user)
         else users.push(user)
     users.slice(0, @get('maxUsers'))
-  searchString: ""
+
 
   endSearch: ->
     firstmatch = @get('filteredUsers')[0]

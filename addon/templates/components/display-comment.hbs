@@ -27,7 +27,8 @@
         </li>
       {{/each}}
     </ul>
-    {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds) addAssigned="addAssigned" closeSearch="closeSearch"}}
+    {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds)
+    addAssigned="addAssigned" closeSearch="closeSearch" searchString=searchString}}
   {{/if}}
 </div>
 

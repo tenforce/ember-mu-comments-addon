@@ -14,6 +14,7 @@
       </ul>
     </div>
   {{/unless}}
-  {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds) addAssigned="addAssigned" closeSearch="closeSearch" }}
+  {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds)
+  addAssigned="addAssigned" closeSearch="closeSearch" searchString=searchString}}
 </div>
 <button type="button" class="btn btn--post-comment" disabled={{loading}} name="submitNewComment" {{action "createComment"}}>{{addButtonLabel}}</button>
