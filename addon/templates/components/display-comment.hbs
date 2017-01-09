@@ -36,8 +36,9 @@
 </div>
 
 <div class="footer">
-  <div class="post-time">Created {{custom-format-date comment.creationDate format=dateFormat.format}}</div>
   {{#if comment.modificationDate}}
     <div class="edit-time">Edited {{custom-format-date comment.modificationDate format=dateFormat.format}}</div>
+  {{else}}
+    <div class="post-time">Created {{custom-format-date comment.creationDate format=dateFormat.format}}</div>
   {{/if}}
 </div>
