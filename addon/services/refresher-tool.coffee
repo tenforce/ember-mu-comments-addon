@@ -7,16 +7,16 @@ RefresherToolService = Ember.Service.extend
   refreshingComments: true
   refreshingNotifications: true
 
-  refreshTimer: 30000
+  refreshTimer: 60000
 
   # we need to refresh comments when the concept has changed
   aboutObserver: Ember.observer('about.id', () ->
-    @refreshComments()
+    if @get('about.id') then @refreshComments()
   ).on('init')
 
   # we need to refresh the notifications when the user has changed (which shouldn't happen but hey)
   userObserver: Ember.observer('user.id', () ->
-    @refreshNotifications()
+    if @get('user.id') then @refreshNotifications()
   ).on('init')
 
   # refresh comments then poll again in x milliseconds
@@ -28,7 +28,7 @@ RefresherToolService = Ember.Service.extend
     promises.push(@getComments())
     Ember.RSVP.Promise.all(promises).then =>
       @set('refreshingComments', false)
-      Ember.run.later(@, @refreshComments, timer)
+      Ember.run.debounce(@, @refreshComments, timer)
 
   # refresh notifications then poll again in x milliseconds
   refreshNotifications: () ->
@@ -39,7 +39,7 @@ RefresherToolService = Ember.Service.extend
     promises.push(@getTargetNotifications())
     Ember.RSVP.Promise.all(promises).then =>
       @set('refreshingNotifications', false)
-      Ember.run.later(@, @refreshNotifications, timer)
+      Ember.run.debounce(@, @refreshNotifications, timer)
 
   getUsers: () ->
     @get('store').query('user', {}).then (users) =>
