@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 `import layout from '../templates/components/display-comments'`
 
-DisplayCommentsComponent = Ember.Component.extend(
+DisplayCommentsComponent = Ember.Component.extend
   layout: layout
   classNames:['display-comments']
   store: Ember.inject.service()
@@ -46,10 +46,8 @@ DisplayCommentsComponent = Ember.Component.extend(
   actions:
     toggleDisplay: ->
       @toggleProperty('isDisplayed')
-
     refresh: ->
       @finishGetComments()
 
-)
 
 `export default DisplayCommentsComponent`

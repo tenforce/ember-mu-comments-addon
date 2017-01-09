@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 `import layout from '../templates/components/display-notifications'`
 
-DisplayNotificationsComponent = Ember.Component.extend(
+DisplayNotificationsComponent = Ember.Component.extend
   layout: layout
   classNames:['display-notifications']
   store: Ember.inject.service()
@@ -43,6 +43,10 @@ DisplayNotificationsComponent = Ember.Component.extend(
         return ret
     return ret
 
+  closeAfterClick: true
+  close: ->
+    @set('isDisplayed', false)
+
   actions:
     toDisplay: (display) ->
       @set 'display', display
@@ -50,6 +54,7 @@ DisplayNotificationsComponent = Ember.Component.extend(
       @toggleProperty('isDisplayed')
     handleClick: (notification) ->
       @sendAction('handleClick', notification)
-)
+      if @get('closeAfterClick') then @close()
+
 
 `export default DisplayNotificationsComponent`
