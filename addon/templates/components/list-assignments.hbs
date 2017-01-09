@@ -8,19 +8,21 @@
   </div>
 {{/if}}
 
-<div class="toggle-hidden-comments {{if showHidden "show" "hide"}}"  {{action 'toggleShowHidden'}}>
-  <h2>
-    <span title={{tooltipShowHidden}}>Hidden</span>
-  </h2>
-</div>
-{{#if showHidden}}
-  {{#if emptyHiddenAssignments}}
-    <span>No hidden notifications to display</span>
-  {{else}}
-    <div class="hidden-comments">
-      {{#each hiddenAssignments as |assignment index|}}
-        {{display-assignment assignment=assignment index=index handleClick="handleClick"}}
-      {{/each}}
-    </div>
+{{#unless emptyHiddenAssignments}}
+  <div class="toggle-hidden-comments {{if showHidden "show" "hide"}}"  {{action 'toggleShowHidden'}}>
+    <h2>
+      <span title={{tooltipShowHidden}}>Hidden</span>
+    </h2>
+  </div>
+  {{#if showHidden}}
+    {{#if emptyHiddenAssignments}}
+      <span>No hidden notifications to display</span>
+    {{else}}
+      <div class="hidden-comments">
+        {{#each hiddenAssignments as |assignment index|}}
+          {{display-assignment assignment=assignment index=index handleClick="handleClick"}}
+        {{/each}}
+      </div>
+    {{/if}}
   {{/if}}
-{{/if}}
+{{/unless}}
