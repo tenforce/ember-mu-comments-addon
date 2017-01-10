@@ -1,9 +1,14 @@
 <div class="header">
   <div class="author">{{await authorName}}</div>
+  {{#if comment.modificationDate}}
+    <div class="post-time edit-time">{{custom-format-date comment.modificationDate format=dateFormat.format}}</div>
+  {{else}}
+    <div class="post-time">{{custom-format-date comment.creationDate format=dateFormat.format}}</div>
+  {{/if}}
   <div class="actions">
     {{#if loading}}
       {{loadingPlaceholder}}
-    {{else unless disable}}
+    {{else unless (or disable editing)}}
       <ul>
         <li class="edit {{if disable "disabled" "enabled"}}">
           <button type="button" class="edit {{if disable "disabled" "enabled"}}" name="modifyComment" disabled={{disable}} {{action "toggleEditing"}}></button>
@@ -21,17 +26,25 @@
     {{textarea value=comment.message key-down="keyPress" disabled=shouldDisableTextArea}}
     <div class="status-symbol {{comment.status}} {{if disableCheckbox "disabled"}}" {{action "changeStatus"}}></div>
     {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds)
-    addAssigned="addAssigned" closeSearch="closeSearch" searchString=searchString}}
+    removeAssigned="removeAssigned" addAssigned="addAssigned" closeSearch="closeSearch" searchString=searchString}}
   {{else}}
     <div class="content">{{comment.message}}</div>
     <div class="status-symbol {{comment.status}} {{if disableCheckbox "disabled"}}" {{action "changeStatus"}}></div>
   {{/if}}
 </div>
 
-<div class="footer">
-  {{#if comment.modificationDate}}
-    <div class="edit-time">Edited {{custom-format-date comment.modificationDate format=dateFormat.format}}</div>
-  {{else}}
-    <div class="post-time">Created {{custom-format-date comment.creationDate format=dateFormat.format}}</div>
-  {{/if}}
-</div>
+{{#unless (or emptyAssignedUsers editing)}}
+  <div class="footer">
+    <!-- check with design for class name here -->
+    <div class="assigned-users">
+      <span class="bell-icon"></span>{{assignedUsersList}}
+    </div>
+  </div>
+{{/unless}}
+
+{{#if editing}}
+  <div class="buttons">
+    <button class="save" {{action "save"}}>Save</button>
+    <button class="cancel" {{action "cancel"}}>Cancel</button>
+  </div>
+{{/if}}

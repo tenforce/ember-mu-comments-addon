@@ -21,13 +21,17 @@ UserSearchComponent = Ember.Component.extend(
 
 
   endSearch: ->
-    firstmatch = @get('filteredUsers')[0]
-    if firstmatch then @finishAddAssigned(firstmatch)
-    else @finishCloseSearch()
+    unless @get('searchString') then @finishCloseSearch()
+    else
+      firstmatch = @get('filteredUsers')[0]
+      if firstmatch then @finishAddAssigned(firstmatch)
+      else @finishCloseSearch()
   finishAddAssigned: (user) ->
     @sendAction('addAssigned', user)
     if @get('closeAfterAdding') then @finishCloseSearch()
     else @clearField()
+  finishRemoveAssigned: (user) ->
+    @sendAction('removeAssigned', user)
   clearField: ->
     @set('searchString', '')
   finishCloseSearch: ->
@@ -36,6 +40,8 @@ UserSearchComponent = Ember.Component.extend(
   actions:
     addAssigned: (user) ->
       @finishAddAssigned(user)
+    removeAssigned: (user) ->
+      @finishRemoveAssigned(user)
     closeSearch: ->
       @finishCloseSearch()
     keyPressSearch: (value, event) ->

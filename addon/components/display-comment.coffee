@@ -85,6 +85,10 @@ DisplayComment = Ember.Component.extend SearchUtils,
 
   handleEnter: ->
     @finishEditing()
+  startEditing: ->
+    @set('backupMessage', @get('comment.message'))
+    @set('backupAssignedUsers', @get('assignedUsers').slice(0))
+    @toggleProperty('editing')
   finishEditing: ->
     @set('loading', true)
     @set('editing', false)
@@ -95,6 +99,8 @@ DisplayComment = Ember.Component.extend SearchUtils,
         unless @get('isDestroyed')
           @set 'searchString', ''
           @set 'loading', false
+    @set('backupMessage', '')
+    @set('backupAssignedUsers', [])
     return @get('comment')
 
   finishChangeStatus: ->
@@ -122,7 +128,7 @@ DisplayComment = Ember.Component.extend SearchUtils,
       promises.push(@get('comment').save())
       Ember.RSVP.Promise.all(promises).then =>
         unless @get('isDestroyed') then @set 'loading', false
-      return @get('comment')
+    return @get('comment')
 
   # we should disable the textarea when we're editing or when we're searching for a user
   shouldDisableTextArea: Ember.computed 'editing', 'disableComment', ->
@@ -142,8 +148,20 @@ DisplayComment = Ember.Component.extend SearchUtils,
         @set('assignedUsers', users)
   ).on('init')
   assignedUsers: undefined
-
+  emptyAssignedUsers: Ember.computed 'assignedUsers.length', ->
+    return !@get('assignedUsers.length') > 0
+  assignedUsersList: Ember.computed 'assignedUsers', 'assignedUsers.length', ->
+    names = []
+    @get('assignedUsers')?.forEach (user) ->
+      names.push(user.get('name'))
+    return names.join(', ')
   actions:
+    save: ->
+      @finishEditing()
+    cancel: ->
+      @set('comment.message', @get('backupMessage'))
+      @set('assignedUsers', @get('backupAssignedUsers'))
+      @set('editing', false)
     deleteComment: (comment) ->
       unless comment.get('isDeleted')
         comment?.destroyRecord().then =>
@@ -152,7 +170,7 @@ DisplayComment = Ember.Component.extend SearchUtils,
     toggleEditing: () ->
       if @get('editing') then @finishEditing()
       else
-        @toggleProperty('editing')
+        @startEditing()
 
     changeStatus: ->
       @finishChangeStatus()
