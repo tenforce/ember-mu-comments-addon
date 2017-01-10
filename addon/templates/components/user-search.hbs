@@ -1,15 +1,17 @@
 <div class="notify-search">
   {{input type="text" id=(concat "userSearch" index) value=searchString key-down="keyPressSearch" escape-press="closeSearch" placeholder='Search user to notify'}}
 </div>
-<div class="assigned-users">
-  <ul>
-    {{#each assignedUsers as |user index|}}
-      <li class="remove {{concat "index-" index}}" {{action "removeAssigned" user}}>
-        <span>{{user.name}}</span>
-      </li>
-    {{/each}}
-  </ul>
-</div>
+{{#if assignedUsers.length}}
+  <div class="assigned-users">
+    <ul>
+      {{#each assignedUsers as |user index|}}
+        <li class="remove {{concat "index-" index}}" {{action "removeAssigned" user}}>
+          <span>{{user.name}}</span>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+{{/if}}
 {{#if searchString}}
   <div class="suggested-users">
     {{#if filteredUsers.length}}
