@@ -5,36 +5,38 @@
   {{else}}
     <div class="post-time">{{custom-format-date comment.creationDate format=dateFormat.format}}</div>
   {{/if}}
-  <div class="actions">
     {{#if loading}}
+    <div class="actions">
       {{loadingPlaceholder}}
+    </div>
     {{else unless (or disable editing)}}
-      <ul>
-        <li class="edit {{if disable "disabled" "enabled"}}">
-          <button type="button" class="edit {{if disable "disabled" "enabled"}}" name="modifyComment" disabled={{disable}} {{action "toggleEditing"}}></button>
-        </li>
-        <li class="delete {{if disable "disabled" "enabled"}}">
-          <button type="button" class="delete {{if disable "disabled" "enabled"}}" name="deleteComment" disabled={{disable}} {{action "deleteComment" comment}}></button>
-        </li>
-      </ul>
+      <div class="actions">
+        <ul>
+          <li class="edit {{if disable "disabled" "enabled"}}">
+            <button type="button" class="edit {{if disable "disabled" "enabled"}}" name="modifyComment" disabled={{disable}} {{action "toggleEditing"}}></button>
+          </li>
+          <li class="delete {{if disable "disabled" "enabled"}}">
+            <button type="button" class="delete {{if disable "disabled" "enabled"}}" name="deleteComment" disabled={{disable}} {{action "deleteComment" comment}}></button>
+          </li>
+        </ul>
+      </div>
     {{/if}}
-  </div>
 </div>
 
-<div class="message {{comment.status}}">
-  {{#if editing}}
+{{#if editing}}
+  <div class="message {{comment.status}}">
     {{textarea value=comment.message key-down="keyPress" disabled=shouldDisableTextArea}}
-    {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds)
-    removeAssigned="removeAssigned" addAssigned="addAssigned" closeSearch="closeSearch" searchString=searchString}}
-  {{else}}
-    <div class="content">{{comment.message}}</div>
-    <div class="status-symbol {{comment.status}} {{if disableCheckbox "disabled"}}" {{action "changeStatus"}}></div>
-  {{/if}}
-</div>
+  </div>
+  {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds)
+  removeAssigned="removeAssigned" addAssigned="addAssigned" closeSearch="closeSearch" searchString=searchString}}
+{{else}}
+  <div class="message">{{comment.message}}</div>
+  <div class="status-symbol {{comment.status}} {{if disableCheckbox "disabled"}}" {{action "changeStatus"}}></div>
+{{/if}}
+
 
 {{#unless (or emptyAssignedUsers editing)}}
   <div class="footer">
-    <!-- check with design for class name here -->
     <div class="assigned-users">
       <span class="bell-icon"></span><span>{{assignedUsersList}}</span>
     </div>
