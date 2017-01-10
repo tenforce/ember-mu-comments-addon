@@ -145,8 +145,9 @@ DisplayComment = Ember.Component.extend SearchUtils,
 
   actions:
     deleteComment: (comment) ->
-      comment?.destroyRecord().then =>
-        @sendAction('refresh')
+      unless comment.get('isDeleted')
+        comment?.destroyRecord().then =>
+          @sendAction('refresh')
 
     toggleEditing: () ->
       if @get('editing') then @finishEditing()
