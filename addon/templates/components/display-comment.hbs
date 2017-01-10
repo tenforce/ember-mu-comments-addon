@@ -24,7 +24,6 @@
 <div class="message {{comment.status}}">
   {{#if editing}}
     {{textarea value=comment.message key-down="keyPress" disabled=shouldDisableTextArea}}
-    <div class="status-symbol {{comment.status}} {{if disableCheckbox "disabled"}}" {{action "changeStatus"}}></div>
     {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds)
     removeAssigned="removeAssigned" addAssigned="addAssigned" closeSearch="closeSearch" searchString=searchString}}
   {{else}}
