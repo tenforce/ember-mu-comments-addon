@@ -5,7 +5,7 @@
   <ul>
     {{#each assignedUsers as |user index|}}
       <li class="remove {{concat "index-" index}}" {{action "removeAssigned" user}}>
-        <span>{{user.name}}</span><button class="remove" tabindex="-1">X</button>
+        <span>{{user.name}}</span>
       </li>
     {{/each}}
   </ul>
