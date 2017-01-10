@@ -1,8 +1,6 @@
 <div class="message">
   {{textarea value=comment.message disabled=loading id="newCommentContent" name="newCommentContent" placeholder=textAreaPlaceholder key-down="keyPress"}}
 </div>
-<div class="notify">
-  {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds)
-  addAssigned="addAssigned" removeAssigned="removeAssigned" closeSearch="closeSearch" searchString=searchString}}
-</div>
+{{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds)
+addAssigned="addAssigned" removeAssigned="removeAssigned" closeSearch="closeSearch" searchString=searchString}}
 <button type="button" class="btn btn--post-comment" disabled={{loading}} name="submitNewComment" {{action "createComment"}}>{{addButtonLabel}}</button>
