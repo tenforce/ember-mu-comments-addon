@@ -2,18 +2,6 @@
   {{textarea value=comment.message disabled=loading id="newCommentContent" name="newCommentContent" placeholder=textAreaPlaceholder key-down="keyPress"}}
 </div>
 <div class="notify">
-  <label>Notify:</label>
-  {{#unless emptyAssignedUsers}}
-    <div class="notified-users">
-      <ul>
-        {{#each assignedUsers as |user|}}
-          <li {{action "removeAssigned" user}}>
-            <button class="remove" tabindex="-1">[-]</button> <span>{{user.name}}</span>
-          </li>
-        {{/each}}
-      </ul>
-    </div>
-  {{/unless}}
   {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds)
   addAssigned="addAssigned" closeSearch="closeSearch" searchString=searchString}}
 </div>

@@ -1,12 +1,18 @@
 {{input type="text" id=(concat "userSearch" index) value=searchString key-down="keyPressSearch" escape-press="closeSearch" placeholder='Search for a person'}}
-
+<ul class="assigned-users">
+  {{#each assignedUsers as |user|}}
+    <li {{action "removeAssigned" user}}>
+      <span>{{user.name}}</span><button class="remove" tabindex="-1">X</button>
+    </li>
+  {{/each}}
+</ul>
 {{#if searchString}}
   <div class="suggested-users">
     {{#if filteredUsers.length}}
       <ul>
         {{#each filteredUsers as |user index|}}
           <li class="add-assigned {{concat "index-" index}}" {{action "addAssigned" user}}>
-            <button tabindex="-1" class="add">[+]</button> <span>{{user.name}}</span>
+            <span>{{user.name}}</span>
           </li>
         {{/each}}
       </ul>

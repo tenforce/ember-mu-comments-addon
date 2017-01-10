@@ -20,13 +20,6 @@
   {{#if editing}}
     {{textarea value=comment.message key-down="keyPress" disabled=shouldDisableTextArea}}
     <div class="status-symbol {{comment.status}} {{if disableCheckbox "disabled"}}" {{action "changeStatus"}}></div>
-    <ul class="assigned-users">
-      {{#each assignedUsers as |user|}}
-        <li {{action "removeAssigned" user}}>
-          <button class="remove" tabindex="-1">[-]</button> <span>{{user.name}}</span>
-        </li>
-      {{/each}}
-    </ul>
     {{user-search index=index assignedUsers=assignedUsers availableUsers=availableUsers closeAfterAdding=(not multiAdds)
     addAssigned="addAssigned" closeSearch="closeSearch" searchString=searchString}}
   {{else}}
