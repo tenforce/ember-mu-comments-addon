@@ -1,5 +1,5 @@
 {{#if emptyShownNotifications}}
-  <span>No notifications to display</span>
+  <span class="msg msg--empty">No notifications to display</span>
 {{else}}
   <div class="visible-comments">
     {{#each shownNotifications as |notification index|}}
@@ -16,7 +16,7 @@
   </div>
   {{#if showHidden}}
     {{#if emptyHiddenNotifications}}
-      <span>No hidden notifications to display</span>
+      <span class="msg msg--empty">No hidden notifications to display</span>
     {{else}}
       <div class="hidden-comments">
         {{#each hiddenNotifications as |notification index|}}

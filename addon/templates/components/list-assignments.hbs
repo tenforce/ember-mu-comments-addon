@@ -1,5 +1,5 @@
 {{#if emptyShownAssignments}}
-  <span>No notifications to display</span>
+  <span class="msg msg--empty">No notifications to display</span>
 {{else}}
   <div class="visible-comments">
     {{#each shownAssignments as |assignment index|}}
@@ -16,7 +16,7 @@
   </div>
   {{#if showHidden}}
     {{#if emptyHiddenAssignments}}
-      <span>No hidden notifications to display</span>
+      <span class="msg msg--empty">No hidden notifications to display</span>
     {{else}}
       <div class="hidden-comments">
         {{#each hiddenAssignments as |assignment index|}}
