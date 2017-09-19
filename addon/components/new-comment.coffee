@@ -47,7 +47,6 @@ NewComment = Ember.Component.extend SearchUtils,
 
   # very long function to just create a comment and notification and assignments and stuff
   creatingComment:  ->
-    @set('loading', true)
     comment = @get('comment')
     if comment?.get('message.length') < 1 then return;
     date = new Date().toISOString()
@@ -57,6 +56,7 @@ NewComment = Ember.Component.extend SearchUtils,
     comment.set('author', @get('user'))
     comment.set('about', @get('about'))
     assigned = @get('assignedUsers')
+    @set('loading', true)
     comment.save().then (persistedComment) =>
       if assigned?.length > 0
         notification = @get('notification')
